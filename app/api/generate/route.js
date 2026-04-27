@@ -3,6 +3,8 @@ import { NextResponse } from 'next/server';
 import { generateBusinessPlan } from '@/lib/gemini';
 import { getSupabaseServer } from '@/lib/supabase-server';
 import { canGeneratePlan, incrementPlanUsage, savePlan } from '@/lib/db';
+import { validateBusinessPlan, sanitizeForPrompt } from '@/lib/validation';
+import { checkRateLimit } from '@/lib/rate-limit';
 
 export const maxDuration = 60;
 export const runtime = 'nodejs';
@@ -33,18 +35,49 @@ export async function POST(request) {
       );
     }
 
+    // Rate limiting check
+    const rateLimit = checkRateLimit(user.id, access.isPro);
+    if (!rateLimit.allowed) {
+      return NextResponse.json(
+        {
+          error: 'RATE_LIMIT_EXCEEDED',
+          message: `Limite di richieste raggiunto. Riprova dopo ${rateLimit.resetAt.toLocaleTimeString()}.`,
+          resetAt: rateLimit.resetAt,
+          limit: rateLimit.limit,
+        },
+        { status: 429 }
+      );
+    }
+
     const body = await request.json();
     const { formData } = body;
 
-    if (!formData?.companyName || !formData?.sector) {
-      return NextResponse.json({ error: 'Dati incompleti.' }, { status: 400 });
+    // Validazione input con Zod
+    const validation = validateBusinessPlan(formData);
+    if (!validation.success) {
+      const errors = validation.error.errors.map(e => ({
+        field: e.path.join('.'),
+        message: e.message,
+      }));
+      return NextResponse.json(
+        { error: 'VALIDATION_ERROR', message: 'Dati non validi', errors },
+        { status: 400 }
+      );
     }
 
-    const result = await generateBusinessPlan(formData);
+    // Sanitizzazione dati prima di passarli all'AI
+    const sanitizedData = Object.fromEntries(
+      Object.entries(validation.data).map(([key, value]) => [
+        key,
+        typeof value === 'string' ? sanitizeForPrompt(value) : value,
+      ])
+    );
+
+    const result = await generateBusinessPlan(sanitizedData);
 
     const savedPlan = await savePlan({
       userId: user.id,
-      formData,
+      formData: sanitizedData,
       outputText: result.text,
       searchQueries: result.searchQueries,
     });
