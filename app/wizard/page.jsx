@@ -263,7 +263,7 @@ export default function WizardPage() {
         return;
       }
 
-      setOutput(result.text);
+      setOutput(result.text || '');
       setSearchQueries(result.searchQueries || []);
       setGenProgress(100);
       setTimeout(() => setView('output'), 400);
@@ -276,7 +276,7 @@ export default function WizardPage() {
     }
   }, [data]);
 
-  const wordCount = output.split(/\s+/).filter(Boolean).length;
+  const wordCount = (output || '').split(/\s+/).filter(Boolean).length;
 
   // ─── VIEWS ────────────────────────────────────────────────────────────────
 
