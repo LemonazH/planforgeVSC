@@ -59,7 +59,7 @@ export async function POST(request) {
       text: result.text,
       searchQueries: result.searchQueries,
       isPro: access.isPro,
-      model: 'gemini-2.0-flash',
+      model: process.env.GEMINI_MODEL || 'gemini-2.5-flash-lite',
     });
 
   } catch (error) {
