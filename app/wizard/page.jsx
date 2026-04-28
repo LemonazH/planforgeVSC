@@ -128,8 +128,13 @@ function renderMarkdown(text) {
         tableLines.push(lines[i]);
         i++;
       }
+      // Defensive: ensure table has minimum structure
+      if (!tableLines[0]) {
+        i++;
+        continue;
+      }
       const headers = tableLines[0].split('|').filter(c => c.trim());
-      const rows = tableLines.slice(2).map(r => r.split('|').filter(c => c.trim()));
+      const rows = tableLines.slice(2)?.map(r => r?.split('|')?.filter(c => c?.trim()))?.filter(r => r?.length > 0) || [];
       elements.push(
         <div key={`t${i}`} style={{ overflowX: 'auto', margin: '8px 0 14px' }}>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 12 }}>
@@ -171,9 +176,10 @@ function renderMarkdown(text) {
 }
 
 function parseBold(text) {
+  if (!text) return null;
   const parts = text.split(/(\*\*[^*]+\*\*)/g);
   return parts.map((p, i) =>
-    p.startsWith('**') && p.endsWith('**')
+    p?.startsWith('**') && p?.endsWith('**')
       ? <strong key={i} style={{ fontWeight: 700, color: '#111' }}>{p.slice(2, -2)}</strong>
       : p
   );
@@ -529,7 +535,7 @@ export default function WizardPage() {
                 ) : f.type === 'select' ? (
                   <select value={data[f.key] || ''} onChange={e => handleChange(f.key, e.target.value)}>
                     <option value="">— Seleziona —</option>
-                    {f.options.map(o => <option key={o}>{o}</option>)}
+                    {(f.options || []).map(o => <option key={o} value={o}>{o}</option>)}
                   </select>
                 ) : (
                   <input
