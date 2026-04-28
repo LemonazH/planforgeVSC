@@ -21,7 +21,7 @@ export default function Home() {
           </div>
           <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
             <a href="#pricing" style={{ fontSize: 13, color: '#555', padding: '6px 12px' }}>Prezzi</a>
-            <Link href="/wizard" style={{
+            <Link href="/auth?redirect=/wizard" style={{
               fontSize: 13, fontWeight: 600, padding: '7px 16px',
               background: '#111', color: '#fff', borderRadius: 8,
             }}>
@@ -60,7 +60,7 @@ export default function Home() {
           </p>
 
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 }}>
-            <Link href="/wizard" style={{
+            <Link href="/auth?redirect=/wizard" style={{
               fontSize: 16, fontWeight: 700, padding: '14px 32px',
               background: '#111', color: '#fff', borderRadius: 10,
               display: 'inline-block',
@@ -176,7 +176,7 @@ export default function Home() {
                   </li>
                 ))}
               </ul>
-              <Link href="/wizard" style={{
+              <Link href="/auth?redirect=/wizard" style={{
                 display: 'block', textAlign: 'center', padding: '10px',
                 border: '1px solid #ddd', borderRadius: 8, fontSize: 14, fontWeight: 600,
               }}>
@@ -252,7 +252,7 @@ export default function Home() {
           <p style={{ fontSize: 16, color: '#999', marginBottom: 32 }}>
             Gratis, in 12 minuti, pronto per banche e investitori.
           </p>
-          <Link href="/wizard" style={{
+          <Link href="/auth?redirect=/wizard" style={{
             fontSize: 16, fontWeight: 700, padding: '14px 36px',
             background: '#fff', color: '#111', borderRadius: 10,
             display: 'inline-block',
