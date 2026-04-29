@@ -10,7 +10,7 @@
 |---|---|---|
 | **Vercel** | Hobby illimitato | Hosting + Serverless |
 | **Supabase** | 500MB DB, 50K MAU | Database + Autenticazione |
-| **Google Gemini 2.0 Flash** | 1.500 req/giorno | LLM + Google Search |
+| **Google gemini-2.5-flash-lite** | 1.500 req/giorno | LLM + Google Search |
 | **Stripe** | Solo % per transazione | Pagamenti Pro |
 
 **Costo fisso mensile: €0**
