@@ -1,129 +1,36 @@
-# ◈ PlanForge — Business Plan AI SaaS
+This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
-> Genera business plan professionali con AI. Stack 100% gratuito da deployare.
+## Getting Started
 
----
-
-## Stack Tecnico (tutto free)
-
-| Servizio | Piano gratuito | Uso |
-|---|---|---|
-| **Vercel** | Hobby illimitato | Hosting + Serverless |
-| **Supabase** | 500MB DB, 50K MAU | Database + Autenticazione |
-| **Google gemini-2.5-flash-lite** | 1.500 req/giorno | LLM + Google Search |
-| **Stripe** | Solo % per transazione | Pagamenti Pro |
-
-**Costo fisso mensile: €0**
-
----
-
-## Struttura del Progetto
-
-```
-planforge/
-├── app/
-│   ├── page.jsx              # Landing page
-│   ├── layout.jsx            # Root layout + SEO
-│   ├── globals.css           # Stili globali
-│   ├── auth/page.jsx         # Login · Signup · Magic link · Reset password
-│   ├── dashboard/page.jsx    # Dashboard utente + storico piani
-│   ├── wizard/page.jsx       # Wizard 10 step + generazione + output
-│   └── api/
-│       ├── generate/route.js # POST → Gemini AI (con auth check)
-│       ├── checkout/route.js # GET → Stripe checkout
-│       └── webhook/route.js  # POST → Stripe webhook → attiva Pro
-├── lib/
-│   ├── supabase.js           # Client Supabase (browser + server + admin)
-│   ├── db.js                 # Operazioni DB (profili, piani, abbonamenti)
-│   └── gemini.js             # Gemini 2.0 Flash + Google Search
-├── middleware.js             # Protezione route autenticate
-├── supabase-schema.sql       # Schema DB da incollare in Supabase
-└── .env.example              # Template variabili d'ambiente
-```
-
----
-
-## Setup Completo (20 minuti)
-
-### 1. Installa e configura
+First, run the development server:
 
 ```bash
-git clone <tuo-repo> && cd planforge
-npm install
-cp .env.example .env.local
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
 ```
 
-### 2. Supabase (Database + Auth) — GRATIS
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-1. Crea account su https://supabase.com
-2. Crea nuovo progetto (scegli regione Europe/Frankfurt)
-3. Vai su **SQL Editor** → incolla il contenuto di `supabase-schema.sql` → clicca **RUN**
-4. Vai su **Settings → API** → copia le chiavi:
-   ```
-   NEXT_PUBLIC_SUPABASE_URL=https://xxxx.supabase.co
-   NEXT_PUBLIC_SUPABASE_ANON_KEY=eyJ...
-   SUPABASE_SERVICE_ROLE_KEY=eyJ...
-   ```
-5. Per abilitare Google OAuth: **Authentication → Providers → Google**
-   (crea credenziali OAuth su Google Cloud Console, inserisci Client ID e Secret)
+You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
 
-### 3. Google Gemini — GRATIS
+This project uses [`next/font`](https://nextjs.org/docs/basic-features/font-optimization) to automatically optimize and load Inter, a custom Google Font.
 
-1. Vai su https://aistudio.google.com/app/apikey
-2. **Create API Key** → copia in `.env.local`:
-   ```
-   GEMINI_API_KEY=AIza...
-   ```
+## Learn More
 
-### 4. Stripe — solo % sulle transazioni
+To learn more about Next.js, take a look at the following resources:
 
-1. Crea account https://stripe.com
-2. **API Keys** → copia chiavi in `.env.local`
-3. Dopo il deploy, aggiungi webhook:
-   - URL: `https://tuodominio.vercel.app/api/webhook`
-   - Events da ascoltare:
-     - `checkout.session.completed`
-     - `invoice.payment_succeeded`
-     - `customer.subscription.deleted`
+- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
+- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
 
-### 5. Deploy su Vercel
+You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
 
-```bash
-npm i -g vercel
-vercel --prod
-```
+## Deploy on Vercel
 
-Aggiungi le env vars in **Vercel → Settings → Environment Variables**.
+The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
 
----
-
-## Come funziona il flusso utente
-
-```
-Landing page
-    ↓
-Registrazione / Login (Supabase Auth)
-    ↓
-Wizard 10 step (raccolta dati)
-    ↓
-API /generate → verifica auth + piano
-    ↓
-Gemini AI + Google Search → business plan
-    ↓
-Salvataggio in Supabase DB
-    ↓
-Output + Dashboard con storico
-    ↓ (se limite free raggiunto)
-Stripe Checkout → Pro €19/mese
-    ↓
-Webhook → attiva Pro in DB
-```
-
----
-
-## Monetizzazione
-
-- **Free**: 3 piani totali per account
-- **Pro**: €19/mese → illimitati + storico completo + supporto
-
-Con 1.000 utenti attivi e conversione 5% = **€950/mese MRR**, costi infrastruttura €0.
+Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.

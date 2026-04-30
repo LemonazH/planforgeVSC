@@ -1,4 +1,10 @@
+import { Outfit } from 'next/font/google';
 import './globals.css';
+import { Navbar } from '@/components/layout/navbar';
+import { Footer } from '@/components/layout/footer';
+import { Toaster } from 'sonner';
+
+const outfit = Outfit({ subsets: ['latin'] });
 
 export const metadata = {
   title: 'PlanForge — Business Plan AI Professionale',
@@ -17,7 +23,12 @@ export default function RootLayout({ children }) {
       <head>
         <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>◈</text></svg>" />
       </head>
-      <body>{children}</body>
+      <body className={`${outfit.className} flex flex-col min-h-screen`}>
+        <Toaster position="bottom-right" />
+        <Navbar />
+        <main className="flex-1">{children}</main>
+        <Footer />
+      </body>
     </html>
   );
 }

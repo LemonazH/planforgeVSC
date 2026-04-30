@@ -4,6 +4,10 @@ import { getSupabaseBrowser } from '@/lib/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { exportToPdf } from '@/lib/pdf-export';
+import { Button } from '@/components/ui/button';
+import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
+import { toast } from 'sonner';
+import { ArrowLeft, Copy, Download, Trash2, Plus, ChevronRight } from 'lucide-react';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
@@ -19,54 +23,76 @@ export default function Dashboard() {
   }, []);
 
   async function loadData() {
-    const sb = getSupabaseBrowser();
-    const { data: { user } } = await sb.auth.getUser();
-    if (!user) { router.push('/auth'); return; }
-    setUser(user);
+    try {
+      const sb = getSupabaseBrowser();
+      const { data: { user } } = await sb.auth.getUser();
+      if (!user) { router.push('/auth'); return; }
+      setUser(user);
 
-    // Carica profilo e piani in parallelo
-    const [profileRes, plansRes] = await Promise.all([
-      sb.from('profiles').select('*').eq('id', user.id).single(),
-      sb.from('business_plans')
-        .select('id, title, company_name, sector, stage, country, word_count, created_at')
-        .eq('user_id', user.id)
-        .order('created_at', { ascending: false }),
-    ]);
+      const [profileRes, plansRes] = await Promise.all([
+        sb.from('profiles').select('*').eq('id', user.id).single(),
+        sb.from('business_plans')
+          .select('id, title, company_name, sector, stage, country, word_count, created_at')
+          .eq('user_id', user.id)
+          .order('created_at', { ascending: false }),
+      ]);
 
-    setProfile(profileRes.data);
-    setPlans(plansRes.data || []);
-    setLoading(false);
+      setProfile(profileRes.data);
+      setPlans(plansRes.data || []);
+    } catch (err) {
+      toast.error('Errore nel caricamento dei dati.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function loadPlanFull(planId) {
     const sb = getSupabaseBrowser();
-    const { data } = await sb
+    const { data, error } = await sb
       .from('business_plans')
       .select('*')
       .eq('id', planId)
       .single();
+    
+    if (error) {
+      toast.error('Errore nel caricamento del piano.');
+      return;
+    }
     setActivePlan(data);
   }
 
   async function deletePlan(planId) {
-    if (!confirm('Eliminare questo business plan?')) return;
+    if (!confirm('Eliminare definitivamente questo business plan?')) return;
     const sb = getSupabaseBrowser();
-    await sb.from('business_plans').delete().eq('id', planId);
+    const { error } = await sb.from('business_plans').delete().eq('id', planId);
+    
+    if (error) {
+      toast.error('Errore durante l\'eliminazione.');
+      return;
+    }
+    
     setPlans(p => p.filter(x => x.id !== planId));
     if (activePlan?.id === planId) setActivePlan(null);
+    toast.success('Business plan eliminato.');
   }
 
-  async function handleLogout() {
-    const sb = getSupabaseBrowser();
-    await sb.auth.signOut();
-    router.push('/');
+  if (loading) {
+    return (
+      <div className="container mx-auto px-4 py-12 max-w-5xl">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-8">
+          {[1,2,3,4].map(i => (
+            <div key={i} className="h-32 bg-gray-200 rounded-xl animate-pulse"></div>
+          ))}
+        </div>
+        <div className="h-6 w-48 bg-gray-200 rounded mb-4 animate-pulse"></div>
+        <div className="space-y-3">
+          {[1,2,3].map(i => (
+            <div key={i} className="h-24 bg-gray-200 rounded-xl animate-pulse"></div>
+          ))}
+        </div>
+      </div>
+    );
   }
-
-  if (loading) return (
-    <div style={{ minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <p style={{ color: '#aaa' }}>Caricamento...</p>
-    </div>
-  );
 
   const isPro = profile?.plan === 'pro' && profile?.subscription_status === 'active';
   const usedFree = profile?.plans_used || 0;
@@ -75,173 +101,165 @@ export default function Dashboard() {
   // ─── PIANO APERTO ────────────────────────────────────────────────────────
   if (activePlan) {
     return (
-      <div style={{ minHeight: '100vh', background: '#f8f8f6' }}>
-        <div style={{ background: '#fff', borderBottom: '1px solid #e2e2de', position: 'sticky', top: 0, zIndex: 10 }}>
-          <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 52 }}>
-            <button onClick={() => setActivePlan(null)} style={{ fontSize: 13, color: '#555', cursor: 'pointer', border: 'none', background: 'none' }}>← Torna alla Dashboard</button>
-        <div style={{ display: 'flex', gap: 8 }}>
-          <button
-            onClick={async () => {
-              setExportingPdf(true);
-              try { await exportToPdf('plan-document', `business-plan-${(activePlan.company_name || 'plan').replace(/\s+/g, '-').toLowerCase()}.pdf`); } catch (e) { console.error(e); }
-              setExportingPdf(false);
-            }}
-            disabled={exportingPdf}
-            style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #ddd', borderRadius: 7, background: exportingPdf ? '#f0fdf4' : '#fff', cursor: 'pointer', color: exportingPdf ? '#16a34a' : '#333' }}>
-            {exportingPdf ? 'Generazione...' : 'Export PDF'}
-          </button>
-          <button
-            onClick={() => { navigator.clipboard.writeText(activePlan.output_text); alert('Copiato!'); }}
-            style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #ddd', borderRadius: 7, background: '#fff', cursor: 'pointer' }}>
-            Copia testo
-          </button>
-          <button
-            onClick={() => deletePlan(activePlan.id)}
-            style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #fecaca', borderRadius: 7, background: '#fef2f2', color: '#dc2626', cursor: 'pointer' }}>
-            Elimina
-          </button>
-        </div>
+      <div className="max-w-4xl mx-auto px-4 py-8">
+        <div className="flex items-center justify-between mb-8">
+          <Button variant="ghost" onClick={() => setActivePlan(null)} className="text-gray-500">
+            <ArrowLeft className="w-4 h-4 mr-2" /> Torna alla Dashboard
+          </Button>
+          <div className="flex gap-2">
+            <Button
+              variant="outline"
+              onClick={async () => {
+                setExportingPdf(true);
+                try {
+                  await exportToPdf('plan-document', `business-plan-${(activePlan.company_name || 'plan').replace(/\s+/g, '-').toLowerCase()}.pdf`);
+                  toast.success('PDF esportato con successo!');
+                } catch (e) {
+                  toast.error('Errore esportazione PDF');
+                }
+                setExportingPdf(false);
+              }}
+              loading={exportingPdf}
+            >
+              <Download className="w-4 h-4 mr-2" /> Export PDF
+            </Button>
+            <Button
+              variant="outline"
+              onClick={() => {
+                navigator.clipboard.writeText(activePlan.output_text);
+                toast.success('Testo copiato negli appunti!');
+              }}
+            >
+              <Copy className="w-4 h-4 mr-2" /> Copia testo
+            </Button>
+            <Button
+              variant="danger"
+              onClick={() => deletePlan(activePlan.id)}
+            >
+              <Trash2 className="w-4 h-4 mr-2" /> Elimina
+            </Button>
           </div>
         </div>
-        <div style={{ maxWidth: 760, margin: '0 auto', padding: '28px 20px' }}>
-          <div id="plan-document" style={{ background: '#fff', border: '1px solid #e2e2de', borderRadius: 12, padding: '28px 32px' }}>
-            <h1 style={{ fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{activePlan.title}</h1>
-            <p style={{ fontSize: 12, color: '#aaa', marginBottom: 28, paddingBottom: 20, borderBottom: '1px solid #f0f0ec' }}>
-              {activePlan.sector} · {activePlan.country} · {new Date(activePlan.created_at).toLocaleDateString('it-IT')} · {activePlan.word_count?.toLocaleString()} parole
-            </p>
-            <div style={{ fontSize: 13, lineHeight: 1.75, color: '#444', whiteSpace: 'pre-wrap' }}>
-              {activePlan.output_text}
-            </div>
+
+        <Card id="plan-document" className="p-8 md:p-12 shadow-sm border-border2">
+          <h1 className="text-3xl font-extrabold mb-2">{activePlan.title}</h1>
+          <p className="text-sm text-gray-500 pb-6 border-b border-gray-100 mb-8">
+            {activePlan.sector} · {activePlan.country} · {new Date(activePlan.created_at).toLocaleDateString('it-IT')} · {activePlan.word_count?.toLocaleString()} parole
+          </p>
+          <div className="prose max-w-none text-gray-800 leading-relaxed whitespace-pre-wrap">
+            {activePlan.output_text}
           </div>
-        </div>
+        </Card>
       </div>
     );
   }
 
   // ─── DASHBOARD PRINCIPALE ─────────────────────────────────────────────────
   return (
-    <div style={{ minHeight: '100vh', background: '#f8f8f6' }}>
-      {/* Navbar */}
-      <nav style={{ background: '#fff', borderBottom: '1px solid #e2e2de', height: 52 }}>
-        <div style={{ maxWidth: 900, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: '100%' }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 18 }}>◈</span>
-            <span style={{ fontWeight: 700, fontSize: 14 }}>PlanForge</span>
-          </Link>
-          <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-            <span style={{ fontSize: 13, color: '#666' }}>{user?.email}</span>
-            <button onClick={handleLogout} style={{ fontSize: 12, padding: '6px 12px', border: '1px solid #ddd', borderRadius: 7, background: '#fff', cursor: 'pointer', color: '#555' }}>
-              Esci
-            </button>
-          </div>
-        </div>
-      </nav>
+    <div className="container mx-auto px-4 py-12 max-w-5xl">
+      {/* Header stats */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-4 mb-8">
+        <Card className={isPro ? "bg-accent text-white" : ""}>
+          <CardHeader className="p-5 pb-2">
+            <CardDescription className={isPro ? "text-gray-300" : ""}>Piano attivo</CardDescription>
+            <CardTitle className="text-2xl">{isPro ? '⭑ Pro' : 'Gratuito'}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-5 pt-0">
+            {!isPro && <a href="/api/checkout" className="text-sm text-blue-600 font-medium mt-1 inline-block hover:underline">Passa a Pro →</a>}
+          </CardContent>
+        </Card>
 
-      <div style={{ maxWidth: 900, margin: '0 auto', padding: '32px 20px' }}>
+        <Card>
+          <CardHeader className="p-5 pb-2">
+            <CardDescription>Piani generati</CardDescription>
+            <CardTitle className="text-2xl">{plans.length}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-5 pt-0">
+            {!isPro && <p className="text-sm text-gray-500">{usedFree}/{limitFree} free usati</p>}
+          </CardContent>
+        </Card>
 
-        {/* Header stats */}
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 12, marginBottom: 28 }}>
-          {/* Piano attivo */}
-          <div style={{ background: isPro ? '#111' : '#fff', border: isPro ? 'none' : '1px solid #e2e2de', borderRadius: 10, padding: '16px 18px', color: isPro ? '#fff' : '#111' }}>
-            <p style={{ fontSize: 11, opacity: 0.6, marginBottom: 4 }}>Piano attivo</p>
-            <p style={{ fontSize: 18, fontWeight: 700 }}>{isPro ? '⭑ Pro' : 'Gratuito'}</p>
-            {!isPro && <a href="/api/checkout" style={{ fontSize: 11, color: '#1d4ed8', marginTop: 4, display: 'block' }}>Passa a Pro →</a>}
-          </div>
-          {/* Piani generati */}
-          <div style={{ background: '#fff', border: '1px solid #e2e2de', borderRadius: 10, padding: '16px 18px' }}>
-            <p style={{ fontSize: 11, color: '#aaa', marginBottom: 4 }}>Piani generati</p>
-            <p style={{ fontSize: 18, fontWeight: 700 }}>{plans.length}</p>
-            {!isPro && <p style={{ fontSize: 11, color: '#aaa' }}>{usedFree}/{limitFree} free usati</p>}
-          </div>
-          {/* Ultimo piano */}
-          <div style={{ background: '#fff', border: '1px solid #e2e2de', borderRadius: 10, padding: '16px 18px' }}>
-            <p style={{ fontSize: 11, color: '#aaa', marginBottom: 4 }}>Ultimo piano</p>
-            <p style={{ fontSize: 14, fontWeight: 600 }}>{plans[0]?.company_name || '—'}</p>
-            <p style={{ fontSize: 11, color: '#aaa' }}>{plans[0] ? new Date(plans[0].created_at).toLocaleDateString('it-IT') : ''}</p>
-          </div>
-          {/* CTA nuovo piano */}
-          <Link href="/wizard" style={{
-            background: '#f0fdf4', border: '1px dashed #bbf7d0',
-            borderRadius: 10, padding: '16px 18px',
-            display: 'flex', flexDirection: 'column', justifyContent: 'center',
-          }}>
-            <p style={{ fontSize: 22, marginBottom: 4 }}>+</p>
-            <p style={{ fontSize: 13, fontWeight: 600, color: '#16a34a' }}>Nuovo piano</p>
-          </Link>
-        </div>
+        <Card>
+          <CardHeader className="p-5 pb-2">
+            <CardDescription>Ultimo piano</CardDescription>
+            <CardTitle className="text-lg truncate">{plans[0]?.company_name || '—'}</CardTitle>
+          </CardHeader>
+          <CardContent className="p-5 pt-0">
+            <p className="text-sm text-gray-500">{plans[0] ? new Date(plans[0].created_at).toLocaleDateString('it-IT') : ''}</p>
+          </CardContent>
+        </Card>
 
-        {/* Barra limiti free */}
-        {!isPro && (
-          <div style={{
-            background: '#fff', border: '1px solid #e2e2de', borderRadius: 10,
-            padding: '14px 18px', marginBottom: 24,
-          }}>
-            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: 8 }}>
-              <span style={{ fontSize: 13, fontWeight: 600 }}>Piano gratuito — utilizzo</span>
-              <span style={{ fontSize: 13, color: '#777' }}>{usedFree} / {limitFree} piani</span>
+        <Link href="/wizard" className="group h-full flex flex-col items-center justify-center p-6 rounded-xl border-2 border-dashed border-green-border bg-green-bg hover:bg-green-50 transition-colors">
+          <div className="w-10 h-10 rounded-full bg-green text-white flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
+            <Plus className="w-6 h-6" />
+          </div>
+          <p className="font-semibold text-green">Nuovo piano</p>
+        </Link>
+      </div>
+
+      {/* Barra limiti free */}
+      {!isPro && (
+        <Card className="mb-8 border-border2">
+          <CardContent className="p-6">
+            <div className="flex justify-between items-end mb-3">
+              <span className="font-semibold">Piano gratuito — utilizzo</span>
+              <span className="text-sm text-gray-500">{usedFree} / {limitFree} piani</span>
             </div>
-            <div style={{ height: 6, background: '#f0f0ec', borderRadius: 3, overflow: 'hidden' }}>
-              <div style={{ height: '100%', width: `${(usedFree / limitFree) * 100}%`, background: usedFree >= limitFree ? '#dc2626' : '#111', borderRadius: 3, transition: 'width 0.3s' }} />
+            <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+              <div 
+                className={`h-full rounded-full transition-all duration-500 ${usedFree >= limitFree ? 'bg-red' : 'bg-accent'}`} 
+                style={{ width: `${Math.min((usedFree / limitFree) * 100, 100)}%` }}
+              />
             </div>
             {usedFree >= limitFree && (
-              <p style={{ fontSize: 12, color: '#dc2626', marginTop: 6 }}>
-                Limite raggiunto. <a href="/api/checkout" style={{ fontWeight: 700, textDecoration: 'underline' }}>Passa a Pro per continuare →</a>
+              <p className="text-sm text-red mt-3">
+                Limite raggiunto. <a href="/api/checkout" className="font-bold underline">Passa a Pro per continuare →</a>
               </p>
             )}
-          </div>
-        )}
+          </CardContent>
+        </Card>
+      )}
 
-        {/* Lista piani */}
-        <h2 style={{ fontSize: 16, fontWeight: 700, marginBottom: 14 }}>I tuoi business plan</h2>
+      <h2 className="text-xl font-bold mb-4">I tuoi business plan</h2>
 
-        {plans.length === 0 ? (
-          <div style={{
-            background: '#fff', border: '1px dashed #e2e2de', borderRadius: 12,
-            padding: '48px 20px', textAlign: 'center',
-          }}>
-            <p style={{ fontSize: 40, marginBottom: 12 }}>◈</p>
-            <p style={{ fontSize: 15, fontWeight: 600, marginBottom: 6 }}>Nessun business plan ancora</p>
-            <p style={{ fontSize: 13, color: '#777', marginBottom: 20 }}>Crea il tuo primo piano in 12 minuti.</p>
-            <Link href="/wizard" style={{
-              display: 'inline-block', padding: '10px 24px',
-              background: '#111', color: '#fff', borderRadius: 8, fontWeight: 700, fontSize: 14,
-            }}>
-              Crea il primo piano →
-            </Link>
-          </div>
-        ) : (
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {plans.map(plan => (
-              <div key={plan.id} style={{
-                background: '#fff', border: '1px solid #e2e2de', borderRadius: 10,
-                padding: '16px 18px', display: 'flex', alignItems: 'center', gap: 14, flexWrap: 'wrap',
-              }}>
-                <div style={{ flex: 1, minWidth: 200 }}>
-                  <p style={{ fontSize: 14, fontWeight: 700, marginBottom: 3 }}>{plan.company_name}</p>
-                  <p style={{ fontSize: 12, color: '#888' }}>
+      {plans.length === 0 ? (
+        <div className="py-20 text-center border-2 border-dashed border-border2 rounded-xl bg-white">
+          <div className="text-5xl text-gray-300 mb-4">◈</div>
+          <h3 className="text-lg font-semibold text-gray-900 mb-2">Nessun business plan ancora</h3>
+          <p className="text-gray-500 mb-6">Crea il tuo primo piano in 12 minuti.</p>
+          <Link href="/wizard">
+            <Button>Crea il primo piano <ChevronRight className="ml-2 w-4 h-4" /></Button>
+          </Link>
+        </div>
+      ) : (
+        <div className="space-y-3">
+          {plans.map(plan => (
+            <Card key={plan.id} className="hover:shadow-md transition-shadow">
+              <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+                <div className="flex-1">
+                  <h3 className="font-bold text-gray-900 mb-1">{plan.company_name}</h3>
+                  <p className="text-sm text-gray-500">
                     {plan.sector} · {plan.country} · {plan.word_count?.toLocaleString()} parole
                   </p>
                 </div>
-                <p style={{ fontSize: 12, color: '#aaa' }}>
-                  {new Date(plan.created_at).toLocaleDateString('it-IT')}
-                </p>
-                <div style={{ display: 'flex', gap: 8 }}>
-                  <button
-                    onClick={() => loadPlanFull(plan.id)}
-                    style={{ padding: '6px 14px', fontSize: 12, fontWeight: 600, border: '1px solid #e2e2de', borderRadius: 7, background: '#fff', cursor: 'pointer' }}>
-                    Apri
-                  </button>
-                  <button
-                    onClick={() => deletePlan(plan.id)}
-                    style={{ padding: '6px 10px', fontSize: 12, border: '1px solid #fecaca', borderRadius: 7, background: '#fef2f2', color: '#dc2626', cursor: 'pointer' }}>
-                    ✕
-                  </button>
+                <div className="flex items-center gap-4 w-full sm:w-auto">
+                  <p className="text-sm text-gray-400 hidden sm:block">
+                    {new Date(plan.created_at).toLocaleDateString('it-IT')}
+                  </p>
+                  <div className="flex gap-2 flex-1 sm:flex-initial">
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto" onClick={() => loadPlanFull(plan.id)}>
+                      Apri
+                    </Button>
+                    <Button variant="danger" size="icon" className="shrink-0" onClick={() => deletePlan(plan.id)}>
+                      <Trash2 className="w-4 h-4" />
+                    </Button>
+                  </div>
                 </div>
               </div>
-            ))}
-          </div>
-        )}
-      </div>
+            </Card>
+          ))}
+        </div>
+      )}
     </div>
   );
 }
