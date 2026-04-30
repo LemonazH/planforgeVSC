@@ -3,11 +3,20 @@
 @tailwind utilities;
 
 @layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
   body {
     @apply bg-bg text-text antialiased selection:bg-white/20 selection:text-white overflow-x-hidden;
     /* Soft ambient glow for depth */
     background-image: radial-gradient(circle at 50% 0%, rgba(39, 39, 42, 0.2) 0%, rgba(0,0,0,1) 80%);
     background-attachment: fixed;
+    /* Ultra-smooth rendering optimizations */
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    overscroll-behavior-y: none;
   }
 }
 

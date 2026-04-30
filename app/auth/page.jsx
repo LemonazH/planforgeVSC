@@ -3,6 +3,9 @@ import { useState } from 'react';
 import { getSupabaseBrowser } from '@/lib/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { Button } from '@/components/ui/button';
+import { Input } from '@/components/ui/input';
 
 export default function AuthPage() {
   const [mode, setMode] = useState('login'); // 'login' | 'signup' | 'magic' | 'forgot'
@@ -36,7 +39,7 @@ export default function AuthPage() {
     });
     setLoading(false);
     if (error) { setError(error.message); return; }
-    setMessage('Controlla la tua email per confermare il tuo account!');
+    setMessage('Controlla la tua email per confermare l\'account!');
   };
 
   const handleMagicLink = async (e) => {
@@ -49,7 +52,7 @@ export default function AuthPage() {
     });
     setLoading(false);
     if (error) { setError(error.message); return; }
-    setMessage(`Link di accesso inviato a ${email}! Controlla la tua email.`);
+    setMessage(`Link di accesso inviato a ${email}!`);
   };
 
   const handleGoogle = async () => {
@@ -73,146 +76,156 @@ export default function AuthPage() {
     setMessage('Email di reset inviata! Controlla la casella di posta.');
   };
 
-  const S = {
-    wrap: { minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 20, background: '#f8f8f6' },
-    card: { background: '#fff', border: '1px solid #e2e2de', borderRadius: 14, padding: 36, width: '100%', maxWidth: 400 },
-    logo: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 28, justifyContent: 'center' },
-    h2: { fontSize: 20, fontWeight: 700, marginBottom: 6, textAlign: 'center' },
-    sub: { fontSize: 13, color: '#777', marginBottom: 28, textAlign: 'center' },
-    label: { display: 'block', fontSize: 12, fontWeight: 600, marginBottom: 5, color: '#333' },
-    field: { marginBottom: 14 },
-    input: { width: '100%', padding: '10px 12px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, outline: 'none' },
-    btn: { width: '100%', padding: '11px', background: '#111', color: '#fff', border: 'none', borderRadius: 8, fontSize: 14, fontWeight: 700, cursor: 'pointer', marginBottom: 10 },
-    btnSecondary: { width: '100%', padding: '10px', border: '1px solid #ddd', borderRadius: 8, fontSize: 14, background: '#fff', cursor: 'pointer', marginBottom: 10, color: '#333', fontWeight: 500 },
-    error: { padding: '10px 12px', background: '#fef2f2', border: '1px solid #fecaca', borderRadius: 8, color: '#dc2626', fontSize: 13, marginBottom: 14 },
-    success: { padding: '10px 12px', background: '#f0fdf4', border: '1px solid #bbf7d0', borderRadius: 8, color: '#16a34a', fontSize: 13, marginBottom: 14 },
-    divider: { textAlign: 'center', fontSize: 12, color: '#aaa', margin: '14px 0', position: 'relative' },
-    link: { color: '#111', fontWeight: 600, cursor: 'pointer', textDecoration: 'underline' },
-  };
-
   return (
-    <div style={S.wrap}>
-      <div style={S.card}>
-        <div style={S.logo}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
-            <span style={{ fontSize: 22 }}>◈</span>
-            <span style={{ fontWeight: 800, fontSize: 16 }}>PlanForge</span>
+    <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-bg">
+      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/[0.02] rounded-full blur-[100px] pointer-events-none"></div>
+
+      <motion.div 
+        initial={{ opacity: 0, scale: 0.98, y: 10 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-[420px] bg-gradient-to-b from-[#121214] to-[#0A0A0A] border border-[#27272A] rounded-2xl p-8 shadow-glass relative z-10"
+      >
+        <div className="flex justify-center mb-10">
+          <Link href="/" className="flex items-center gap-3">
+            <span className="text-2xl text-white/80">◈</span>
+            <span className="font-semibold text-xl tracking-tight text-white">PlanForge</span>
           </Link>
         </div>
 
-        {mode === 'login' && (
-          <>
-            <h2 style={S.h2}>Bentornato</h2>
-            <p style={S.sub}>Accedi al tuo account PlanForge</p>
-            {error && <div style={S.error}>{error}</div>}
-            {message && <div style={S.success}>{message}</div>}
-            <form onSubmit={handleLogin}>
-              <div style={S.field}>
-                <label style={S.label}>Email</label>
-                <input style={S.input} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required />
-              </div>
-              <div style={S.field}>
-                <label style={S.label}>Password</label>
-                <input style={S.input} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required />
-                <div style={{ textAlign: 'right', marginTop: 5 }}>
-                  <span onClick={() => setMode('forgot')} style={{ ...S.link, fontSize: 12 }}>Password dimenticata?</span>
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={mode}
+            initial={{ opacity: 0, x: 10 }}
+            animate={{ opacity: 1, x: 0 }}
+            exit={{ opacity: 0, x: -10 }}
+            transition={{ duration: 0.3 }}
+          >
+            {error && <div className="p-3 mb-6 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">{error}</div>}
+            {message && <div className="p-3 mb-6 bg-green-500/10 border border-green-500/20 rounded-lg text-green-500 text-sm">{message}</div>}
+
+            {mode === 'login' && (
+              <>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Bentornato</h2>
+                <p className="text-sm text-gray-400 mb-8 text-center">Accedi al tuo account PlanForge</p>
+                <form onSubmit={handleLogin} className="space-y-5">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                  </div>
+                  <div>
+                    <div className="flex justify-between items-center mb-2">
+                      <label className="text-xs font-medium text-gray-400">Password</label>
+                      <button type="button" onClick={() => setMode('forgot')} className="text-xs text-gray-500 hover:text-white transition-colors">Password dimenticata?</button>
+                    </div>
+                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                  </div>
+                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                    {loading ? 'Accesso in corso...' : 'Accedi'}
+                  </Button>
+                </form>
+
+                <div className="relative my-8 text-center">
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#27272A]"></div></div>
+                  <span className="relative bg-[#0E0E10] px-3 text-xs text-gray-500 uppercase tracking-wider">oppure</span>
                 </div>
-              </div>
-              <button type="submit" style={S.btn} disabled={loading}>
-                {loading ? 'Accesso...' : 'Accedi →'}
-              </button>
-            </form>
-            <div style={S.divider}>oppure</div>
-            <button style={S.btnSecondary} onClick={handleGoogle}>
-              Continua con Google
-            </button>
-            <button style={S.btnSecondary} onClick={() => setMode('magic')}>
-              Accedi con link email (senza password)
-            </button>
-            <p style={{ textAlign: 'center', fontSize: 13, color: '#777', marginTop: 16 }}>
-              Non hai un account?{' '}
-              <span onClick={() => setMode('signup')} style={S.link}>Registrati gratis</span>
-            </p>
-          </>
-        )}
 
-        {mode === 'signup' && (
-          <>
-            <h2 style={S.h2}>Crea il tuo account</h2>
-            <p style={S.sub}>Gratis · 3 business plan inclusi</p>
-            {error && <div style={S.error}>{error}</div>}
-            {message && <div style={S.success}>{message}</div>}
-            <form onSubmit={handleSignup}>
-              <div style={S.field}>
-                <label style={S.label}>Nome completo</label>
-                <input style={S.input} type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Mario Rossi" required />
-              </div>
-              <div style={S.field}>
-                <label style={S.label}>Email</label>
-                <input style={S.input} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required />
-              </div>
-              <div style={S.field}>
-                <label style={S.label}>Password</label>
-                <input style={S.input} type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Minimo 8 caratteri" required minLength={8} />
-              </div>
-              <button type="submit" style={S.btn} disabled={loading}>
-                {loading ? 'Registrazione...' : 'Crea account gratis →'}
-              </button>
-            </form>
-            <div style={S.divider}>oppure</div>
-            <button style={S.btnSecondary} onClick={handleGoogle}>Continua con Google</button>
-            <p style={{ textAlign: 'center', fontSize: 12, color: '#aaa', marginTop: 10 }}>
-              Registrandoti accetti i nostri Termini di servizio.
-            </p>
-            <p style={{ textAlign: 'center', fontSize: 13, color: '#777', marginTop: 10 }}>
-              Hai già un account?{' '}
-              <span onClick={() => setMode('login')} style={S.link}>Accedi</span>
-            </p>
-          </>
-        )}
+                <div className="space-y-3">
+                  <Button variant="secondary" className="w-full" onClick={handleGoogle}>Continua con Google</Button>
+                  <Button variant="outline" className="w-full" onClick={() => setMode('magic')}>Accedi senza password</Button>
+                </div>
+                
+                <p className="text-center text-sm text-gray-500 mt-8">
+                  Non hai un account?{' '}
+                  <button onClick={() => setMode('signup')} className="text-white hover:text-gray-300 font-medium transition-colors">Registrati gratis</button>
+                </p>
+              </>
+            )}
 
-        {mode === 'magic' && (
-          <>
-            <h2 style={S.h2}>Link magico</h2>
-            <p style={S.sub}>Ti mandiamo un link di accesso diretto via email, senza password.</p>
-            {error && <div style={S.error}>{error}</div>}
-            {message && <div style={S.success}>{message}</div>}
-            <form onSubmit={handleMagicLink}>
-              <div style={S.field}>
-                <label style={S.label}>Email</label>
-                <input style={S.input} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required />
-              </div>
-              <button type="submit" style={S.btn} disabled={loading}>
-                {loading ? 'Invio...' : 'Invia link di accesso'}
-              </button>
-            </form>
-            <p style={{ textAlign: 'center', fontSize: 13, color: '#777', marginTop: 16 }}>
-              <span onClick={() => setMode('login')} style={S.link}>← Torna al login</span>
-            </p>
-          </>
-        )}
+            {mode === 'signup' && (
+              <>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Inizia ora</h2>
+                <p className="text-sm text-gray-400 mb-8 text-center">Gratis · 3 business plan inclusi</p>
+                <form onSubmit={handleSignup} className="space-y-5">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-2">Nome completo</label>
+                    <Input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Mario Rossi" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                  </div>
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-2">Password</label>
+                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Minimo 8 caratteri" required minLength={8} className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                  </div>
+                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                    {loading ? 'Creazione in corso...' : 'Crea account gratis'}
+                  </Button>
+                </form>
 
-        {mode === 'forgot' && (
-          <>
-            <h2 style={S.h2}>Reset password</h2>
-            <p style={S.sub}>Ti mandiamo un link per reimpostare la password.</p>
-            {error && <div style={S.error}>{error}</div>}
-            {message && <div style={S.success}>{message}</div>}
-            <form onSubmit={handleForgot}>
-              <div style={S.field}>
-                <label style={S.label}>Email</label>
-                <input style={S.input} type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required />
-              </div>
-              <button type="submit" style={S.btn} disabled={loading}>
-                {loading ? 'Invio...' : 'Invia link di reset'}
-              </button>
-            </form>
-            <p style={{ textAlign: 'center', fontSize: 13, color: '#777', marginTop: 16 }}>
-              <span onClick={() => setMode('login')} style={S.link}>← Torna al login</span>
-            </p>
-          </>
-        )}
-      </div>
+                <div className="relative my-8 text-center">
+                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#27272A]"></div></div>
+                  <span className="relative bg-[#0E0E10] px-3 text-xs text-gray-500 uppercase tracking-wider">oppure</span>
+                </div>
+
+                <Button variant="secondary" className="w-full mb-6" onClick={handleGoogle}>Continua con Google</Button>
+                
+                <p className="text-center text-xs text-gray-600 mb-4">
+                  Registrandoti accetti i nostri Termini di servizio.
+                </p>
+                <p className="text-center text-sm text-gray-500">
+                  Hai già un account?{' '}
+                  <button onClick={() => setMode('login')} className="text-white hover:text-gray-300 font-medium transition-colors">Accedi</button>
+                </p>
+              </>
+            )}
+
+            {mode === 'magic' && (
+              <>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Link Magico</h2>
+                <p className="text-sm text-gray-400 mb-8 text-center">Ricevi un link di accesso sicuro senza digitare la password.</p>
+                <form onSubmit={handleMagicLink} className="space-y-5">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                  </div>
+                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                    {loading ? 'Invio in corso...' : 'Invia link magico'}
+                  </Button>
+                </form>
+                <div className="text-center mt-8">
+                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-white transition-colors">
+                    ← Torna al login
+                  </button>
+                </div>
+              </>
+            )}
+
+            {mode === 'forgot' && (
+              <>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Reset Password</h2>
+                <p className="text-sm text-gray-400 mb-8 text-center">Un link per reimpostare la tua parola d'ordine.</p>
+                <form onSubmit={handleForgot} className="space-y-5">
+                  <div>
+                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                  </div>
+                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                    {loading ? 'Invio in corso...' : 'Invia link di reset'}
+                  </Button>
+                </form>
+                <div className="text-center mt-8">
+                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-white transition-colors">
+                    ← Torna al login
+                  </button>
+                </div>
+              </>
+            )}
+          </motion.div>
+        </AnimatePresence>
+      </motion.div>
     </div>
   );
 }
