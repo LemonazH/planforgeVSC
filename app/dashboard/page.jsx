@@ -19,8 +19,8 @@ export default function Dashboard() {
   const router = useRouter();
 
   useEffect(() => {
-    // eslint-disable-next-line react-hooks/exhaustive-deps
     loadData();
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   async function loadData() {

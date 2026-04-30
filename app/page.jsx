@@ -43,7 +43,7 @@ export default function Home() {
           </motion.h1>
 
           <motion.p variants={itemVariants} className="text-lg md:text-2xl text-text-muted mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-            L'eccellenza dell'intelligenza artificiale forgia il tuo futuro. 10 step. Dati di mercato reali. Formattazione immacolata per investitori e board of directors.
+            L&apos;eccellenza dell&apos;intelligenza artificiale forgia il tuo futuro. 10 step. Dati di mercato reali. Formattazione immacolata per investitori e board of directors.
           </motion.p>
 
           <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
@@ -54,11 +54,11 @@ export default function Home() {
             </Link>
             <a href="#come-funziona" className="w-full sm:w-auto">
               <Button variant="outline" size="lg" className="w-full sm:w-auto text-base h-16 rounded-xl">
-                SCOPRI L'ARSENALE
+                SCOPRI L&apos;ARSENALE
               </Button>
             </a>
           </motion.div>
-          <motion.p variants={itemVariants} className="text-sm font-mono text-text-muted/60 uppercase tracking-wider">3 business plan completi nell'Ecosistema Gratuito</motion.p>
+          <motion.p variants={itemVariants} className="text-sm font-mono text-text-muted/60 uppercase tracking-wider">3 business plan completi nell&apos;Ecosistema Gratuito</motion.p>
         </motion.div>
       </section>
 
@@ -90,13 +90,13 @@ export default function Home() {
             className="text-center mb-20"
           >
             <h2 className="text-4xl md:text-5xl font-extrabold uppercase tracking-tight mb-6">DOMINA IL MERCATO</h2>
-            <p className="text-text-muted text-xl font-light">L'infrastruttura definitiva che straccia migliaia di euro in consulenze.</p>
+            <p className="text-text-muted text-xl font-light">L&apos;infrastruttura definitiva che straccia migliaia di euro in consulenze.</p>
           </motion.div>
           
           <div className="grid md:grid-cols-3 gap-8 relative z-10">
             {[
               { icon: Target, t: 'ACQUISIZIONE DATI', d: 'Wizard chirurgico. 10 frammenti incisivi estratti dal tuo modello di business per addestrare il motore.' },
-              { icon: Search, t: 'ANALISI PREDITTIVA', d: 'L\'Agente AI rastrella il web. Preleva benchmark. Valuta competitor. Sputa dati azionabili.' },
+              { icon: Search, t: 'ANALISI PREDITTIVA', d: 'L&apos;Agente AI rastrella il web. Preleva benchmark. Valuta competitor. Sputa dati azionabili.' },
               { icon: BarChart3, t: 'FORGIATURA', d: 'Risultato: un master-document immacolato e feroce, ottimizzato per convincere board e VC.' },
             ].map((f, i) => (
               <Card key={i} className="bg-bg2/40 border-border2 hover:border-accent group">
@@ -133,7 +133,7 @@ export default function Home() {
                 <p className="text-text-muted font-mono uppercase text-sm tracking-wider">A vita</p>
               </CardHeader>
               <CardContent className="p-10 pt-0 space-y-6">
-                {['3 MASTER PLAN MENSILI', 'MOTORE RICERCA AI', 'TESTO GREZZO', 'L\'INTERA INFRASTRUTTURA'].map(f => (
+                {['3 MASTER PLAN MENSILI', 'MOTORE RICERCA AI', 'TESTO GREZZO', 'L&apos;INTERA INFRASTRUTTURA'].map(f => (
                   <div key={f} className="flex items-center gap-4">
                     <CheckCircle2 className="w-6 h-6 text-text-muted" />
                     <span className="text-text-muted font-bold tracking-tight">{f}</span>
@@ -153,7 +153,7 @@ export default function Home() {
               <div className="absolute top-0 right-0 w-32 h-32 bg-accent opacity-20 blur-3xl pointer-events-none"></div>
               
               <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-black text-[10px] font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-glow">
-                L'ELITE
+                L&apos;ELITE
               </div>
               <CardHeader className="p-10 pb-8 relative z-10">
                 <p className="text-sm font-bold text-accent uppercase tracking-widest mb-4">EXECUTIVE PRO</p>
@@ -195,7 +195,7 @@ export default function Home() {
         >
           <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 uppercase text-white">Pronto A Incassare?</h2>
           <p className="text-text-muted text-xl md:text-2xl mb-12 max-w-3xl mx-auto font-light">
-            In 12 minuti avrai in mano l'arma che sfonderà le porte del successo. Non aspettare.
+            In 12 minuti avrai in mano l&apos;arma che sfonderà le porte del successo. Non aspettare.
           </p>
           <Link href="/auth?redirect=/wizard">
             <Button size="lg" className="h-16 px-10 text-base shadow-glow-strong">
