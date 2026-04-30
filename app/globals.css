@@ -4,25 +4,26 @@
 
 @layer base {
   body {
-    @apply bg-bg text-text antialiased selection:bg-accent selection:text-accent-fg overflow-x-hidden;
-    /* Premium subtle noise texture overlay effect */
-    background-image: radial-gradient(circle at 50% 0%, rgba(39, 39, 42, 0.3) 0%, transparent 70%);
+    @apply bg-bg text-text antialiased selection:bg-white/20 selection:text-white overflow-x-hidden;
+    /* Soft ambient glow for depth */
+    background-image: radial-gradient(circle at 50% 0%, rgba(39, 39, 42, 0.2) 0%, rgba(0,0,0,1) 80%);
+    background-attachment: fixed;
   }
 }
 
-/* Custom Scrollbar - Premium Dark */
+/* Custom Scrollbar - Professional Minimal */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 6px;
 }
 ::-webkit-scrollbar-track {
-  background: #050505;
+  background: transparent;
 }
 ::-webkit-scrollbar-thumb {
-  background: #27272A;
+  background: #3F3F46;
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #3F3F46;
+  background: #52525B;
 }
 
 /* Base transitions */

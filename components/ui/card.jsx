@@ -5,12 +5,12 @@ import { motion } from "framer-motion"
 
 const Card = React.forwardRef(({ className, ...props }, ref) => (
   <motion.div
-    initial={{ opacity: 0, y: 20 }}
+    initial={{ opacity: 0, y: 15 }}
     whileInView={{ opacity: 1, y: 0 }}
-    viewport={{ once: true }}
-    transition={{ duration: 0.5, ease: "easeOut" }}
+    viewport={{ once: true, margin: "-50px" }}
+    transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
     ref={ref}
-    className={`rounded-2xl border border-border2 bg-bg3/80 backdrop-blur-md text-text shadow-glass transition-all duration-300 hover:shadow-glow hover:border-accent/50 ${className}`}
+    className={`rounded-2xl border border-[#27272A] bg-gradient-to-b from-[#0A0A0A] to-[#000000] text-white shadow-lg transition-colors duration-500 hover:border-[#3F3F46] ${className}`}
     {...props}
   />
 ))

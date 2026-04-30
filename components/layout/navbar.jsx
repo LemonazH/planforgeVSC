@@ -34,28 +34,29 @@ export function Navbar() {
       <div className="container mx-auto px-6 h-20 flex items-center justify-between">
         <Link href="/" className="flex items-center gap-3 group">
           <motion.span 
-            className="text-2xl text-accent"
-            animate={{ rotate: 360 }}
-            transition={{ duration: 20, repeat: Infinity, ease: "linear" }}
+            className="text-2xl text-white"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ duration: 1 }}
           >◈</motion.span>
-          <span className="font-extrabold text-xl tracking-tighter text-white uppercase group-hover:text-transparent group-hover:bg-clip-text group-hover:bg-gradient-to-r group-hover:from-white group-hover:to-accent transition-all duration-500">PlanForge</span>
-          <span className="text-[10px] px-2 py-0.5 rounded border-accent/20 bg-accent/10 text-accent font-bold tracking-widest uppercase shadow-glow">
+          <span className="font-semibold text-lg tracking-tight text-white transition-colors duration-300">PlanForge</span>
+          <span className="text-[10px] px-1.5 py-0.5 rounded border-[#27272A] bg-[#18181B] text-gray-300 font-medium tracking-wide">
             BETA
           </span>
         </Link>
         <div className="flex items-center gap-6">
           {!user ? (
             <>
-              <a href="/#pricing" className="text-sm font-semibold uppercase tracking-wider text-text-muted hover:text-white transition-colors duration-200 hidden sm:block">Pricing</a>
+              <a href="/#pricing" className="text-sm font-medium text-gray-400 hover:text-white transition-colors duration-200 hidden sm:block">Prezzi</a>
               <Link href="/auth?redirect=/wizard">
-                <Button size="sm" className="shadow-[0_0_20px_rgba(234,179,8,0.2)]">Inizia Ora</Button>
+                <Button size="sm">Inizia Ora</Button>
               </Link>
             </>
           ) : (
             <>
-              <span className="text-xs font-mono text-text-muted hidden sm:block opacity-70">{user.email}</span>
+              <span className="text-xs text-gray-500 hidden sm:block">{user.email}</span>
               <Link href="/dashboard">
-                <Button variant="outline" size="sm">Hub Dashboard</Button>
+                <Button variant="outline" size="sm">Dashboard</Button>
               </Link>
             </>
           )}

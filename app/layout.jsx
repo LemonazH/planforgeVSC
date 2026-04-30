@@ -19,9 +19,9 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="it" className="dark selection:bg-accent selection:text-black">
+    <html lang="it" className="dark selection:bg-white/20 selection:text-white">
       <head>
-        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' fill='%23EAB308' font-size='90'>◈</text></svg>" />
+        <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' fill='%23FFFFFF' font-size='90'>◈</text></svg>" />
       </head>
       <body className={`${outfit.className} flex flex-col min-h-screen bg-bg text-text`}>
         <Toaster position="bottom-right" theme="dark" toastOptions={{ style: { background: '#111111', border: '1px solid #27272A', color: '#FAFAFA' } }} />

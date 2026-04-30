@@ -21,58 +21,58 @@ const itemVariants = {
 export default function Home() {
   return (
     <div className="flex flex-col relative w-full overflow-hidden">
-      {/* BACKGROUND GLOWS */}
-      <div className="absolute top-0 right-0 w-[800px] h-[800px] bg-accent/10 rounded-full blur-[120px] -z-10 pointer-events-none" />
-      <div className="absolute top-[40%] left-[-20%] w-[600px] h-[600px] bg-primary/20 rounded-full blur-[150px] -z-10 pointer-events-none" />
+      {/* BG GLOW REMOVED FOR MORE SOBER LOOK */}
+      <div className="absolute top-[20%] left-[50%] -translate-x-1/2 w-[800px] h-[600px] bg-white/[0.02] rounded-full blur-[120px] -z-10 pointer-events-none" />
 
       {/* HERO */}
-      <section className="py-24 md:py-36 relative border-b border-border2 bg-bg/50 backdrop-blur-sm">
+      <section className="py-24 md:py-36 relative border-b border-[#27272A] bg-black/50 backdrop-blur-sm">
         <motion.div 
           variants={containerVariants}
           initial="hidden"
           animate="show"
-          className="container mx-auto px-6 text-center max-w-5xl"
+          className="container mx-auto px-6 text-center max-w-4xl"
         >
-          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 text-xs px-5 py-2 rounded-full bg-accent/10 text-accent font-bold uppercase tracking-widest border border-accent/20 mb-10 shadow-glow">
-            <span className="animate-pulse">✦</span> Accesso Gratuito · Nessuna Carta Richiesta
+          <motion.div variants={itemVariants} className="inline-flex items-center gap-2 text-xs px-4 py-1.5 rounded-full bg-white/5 text-gray-300 font-medium border border-white/10 mb-10 transition-colors hover:bg-white/10">
+            <span className="text-white">✦</span> Accesso Gratuito · Nessuna Carta Richiesta
           </motion.div>
 
-          <motion.h1 variants={itemVariants} className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 leading-[1.1] text-white">
-            Un Business Plan<br />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-text-muted to-border2">Da Rockstar, in 12 Minuti.</span>
+          <motion.h1 variants={itemVariants} className="text-4xl md:text-6xl font-bold tracking-tight mb-8 leading-tight text-white">
+            Il tuo business plan professionale,<br />
+            <span className="text-gray-500">pronto in 12 minuti.</span>
           </motion.h1>
 
-          <motion.p variants={itemVariants} className="text-lg md:text-2xl text-text-muted mb-12 max-w-3xl mx-auto leading-relaxed font-light">
-            L&apos;eccellenza dell&apos;intelligenza artificiale forgia il tuo futuro. 10 step. Dati di mercato reali. Formattazione immacolata per investitori e board of directors.
+          <motion.p variants={itemVariants} className="text-lg md:text-xl text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
+            Rispondi a 10 sezioni strutturate. L&apos;AI analizza dati di mercato reali, benchmark di settore e genera un piano pronto per investitori, banche e partner.
           </motion.p>
 
-          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-6 justify-center items-center mb-8">
+          <motion.div variants={itemVariants} className="flex flex-col sm:flex-row gap-4 justify-center items-center mb-8">
             <Link href="/auth?redirect=/wizard" className="w-full sm:w-auto">
-              <Button size="lg" className="w-full sm:w-auto text-base h-16 rounded-xl shadow-glow-strong">
-                FORGIA IL TUO PIANO <ChevronRight className="ml-2 w-6 h-6" />
+              <Button size="lg" className="w-full sm:w-auto text-base">
+                Crea il tuo Business Plan <ChevronRight className="ml-2 w-5 h-5" />
               </Button>
             </Link>
             <a href="#come-funziona" className="w-full sm:w-auto">
-              <Button variant="outline" size="lg" className="w-full sm:w-auto text-base h-16 rounded-xl">
-                SCOPRI L&apos;ARSENALE
+              <Button variant="outline" size="lg" className="w-full sm:w-auto text-base">
+                Scopri come funziona
               </Button>
             </a>
           </motion.div>
-          <motion.p variants={itemVariants} className="text-sm font-mono text-text-muted/60 uppercase tracking-wider">3 business plan completi nell&apos;Ecosistema Gratuito</motion.p>
+          <motion.p variants={itemVariants} className="text-xs text-gray-500">Il piano gratuito include 3 business plan completi.</motion.p>
         </motion.div>
       </section>
 
       {/* SOCIAL PROOF */}
-      <section className="py-8 bg-bg3 border-b border-border2">
+      <section className="py-8 bg-[#0A0A0B] border-b border-[#27272A]">
         <div className="container mx-auto px-6">
           <motion.div 
-            initial={{ opacity: 0, scale: 0.9 }}
-            whileInView={{ opacity: 1, scale: 1 }}
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            transition={{ duration: 1 }}
             viewport={{ once: true }}
-            className="flex gap-4 flex-wrap justify-center"
+            className="flex gap-3 flex-wrap justify-center"
           >
-            {['STARTUP & FOUNDER', 'EXECUTIVE', 'BUSINESS ANGEL', 'STUDI LEGALI', 'COMMERCIALISTI'].map((t, i) => (
-              <span key={i} className="text-xs px-5 py-2 rounded border border-border2 bg-bg text-text-muted font-bold tracking-widest uppercase shadow-sm">
+            {['Startup & Founder', 'Studi di Consulenza', 'Business Angel', 'PMI in Crescita', 'Commercialisti', 'Manager'].map((t, i) => (
+              <span key={i} className="text-sm px-4 py-1.5 rounded-full border border-[#27272A] bg-transparent text-gray-400">
                 {t}
               </span>
             ))}
@@ -81,102 +81,105 @@ export default function Home() {
       </section>
 
       {/* FEATURES */}
-      <section id="come-funziona" className="py-32 bg-bg relative">
-        <div className="container mx-auto px-6 max-w-6xl">
+      <section id="come-funziona" className="py-24 bg-black relative">
+        <div className="container mx-auto px-6 max-w-5xl">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-center mb-20"
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
           >
-            <h2 className="text-4xl md:text-5xl font-extrabold uppercase tracking-tight mb-6">DOMINA IL MERCATO</h2>
-            <p className="text-text-muted text-xl font-light">L&apos;infrastruttura definitiva che straccia migliaia di euro in consulenze.</p>
+            <h2 className="text-3xl font-semibold mb-4 text-white">Processo Strutturato</h2>
+            <p className="text-gray-400 text-lg">Tre passaggi per ottenere un documento di altissima qualità.</p>
           </motion.div>
           
-          <div className="grid md:grid-cols-3 gap-8 relative z-10">
+          <div className="grid md:grid-cols-3 gap-6 relative z-10">
             {[
-              { icon: Target, t: 'ACQUISIZIONE DATI', d: 'Wizard chirurgico. 10 frammenti incisivi estratti dal tuo modello di business per addestrare il motore.' },
-              { icon: Search, t: 'ANALISI PREDITTIVA', d: 'L&apos;Agente AI rastrella il web. Preleva benchmark. Valuta competitor. Sputa dati azionabili.' },
-              { icon: BarChart3, t: 'FORGIATURA', d: 'Risultato: un master-document immacolato e feroce, ottimizzato per convincere board e VC.' },
+              { icon: Target, t: 'Dati Mirati', d: 'Wizard guidato in 10 step che raccoglie esclusivamente i dati essenziali del tuo modello di business.' },
+              { icon: Search, t: 'Analisi AI Reale', d: 'L&apos;Intelligenza Artificiale ricerca dati di mercato, parametri di settore e concorrenti.' },
+              { icon: BarChart3, t: 'Piano Definitivo', d: 'Ricevi un documento completo, professionalmente formattato, ottimizzato per valutazioni tecniche e finanziarie.' },
             ].map((f, i) => (
-              <Card key={i} className="bg-bg2/40 border-border2 hover:border-accent group">
-                <CardHeader>
-                  <div className="w-14 h-14 rounded-lg bg-bg border border-border2 text-text group-hover:bg-accent group-hover:text-black group-hover:border-accent transition-all duration-500 flex items-center justify-center mb-6 shadow-sm group-hover:shadow-glow">
-                    <f.icon className="w-7 h-7" />
-                  </div>
-                  <CardTitle className="text-2xl uppercase tracking-tighter">{f.t}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <CardDescription className="text-lg text-text-muted/80">{f.d}</CardDescription>
-                </CardContent>
-              </Card>
+              <motion.div 
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+              >
+                <Card className="h-full bg-gradient-to-b from-[#121214] to-black hover:border-gray-500 transition-colors">
+                  <CardHeader>
+                    <div className="w-10 h-10 rounded border border-[#27272A] bg-[#18181B] text-white flex items-center justify-center mb-4 transition-colors duration-300">
+                      <f.icon className="w-5 h-5 opacity-80" />
+                    </div>
+                    <CardTitle className="text-lg font-medium text-white">{f.t}</CardTitle>
+                  </CardHeader>
+                  <CardContent>
+                    <CardDescription className="text-sm text-gray-400 leading-relaxed">{f.d}</CardDescription>
+                  </CardContent>
+                </Card>
+              </motion.div>
             ))}
           </div>
         </div>
       </section>
 
       {/* PRICING */}
-      <section id="pricing" className="py-32 bg-bg2 relative overflow-hidden">
-        <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.03] mix-blend-overlay"></div>
-        <div className="container mx-auto px-6 max-w-5xl relative z-10">
-          <div className="text-center mb-20">
-            <h2 className="text-4xl md:text-5xl font-extrabold uppercase tracking-tight mb-6">IL COSTO DEL POTERE</h2>
-            <p className="text-text-muted text-xl font-light">Nessun trucco. Scalabilità letale.</p>
+      <section id="pricing" className="py-24 bg-[#0A0A0B] border-t border-[#27272A] relative">
+        <div className="container mx-auto px-6 max-w-4xl relative z-10">
+          <div className="text-center mb-16">
+            <h2 className="text-3xl font-semibold mb-4 text-white">Tariffazione Trasparente</h2>
+            <p className="text-gray-400 text-lg">Strumenti professionali, senza sorprese.</p>
           </div>
           
-          <div className="grid md:grid-cols-2 gap-10">
+          <div className="grid md:grid-cols-2 gap-6">
             {/* FREE */}
-            <Card className="bg-bg box-border hover:-translate-y-2 transition-transform duration-500">
-              <CardHeader className="p-10 pb-8">
-                <p className="text-sm font-bold text-text-muted uppercase tracking-widest mb-4">Essenziale</p>
-                <div className="text-7xl font-extrabold tracking-tighter mb-4 text-white">€0</div>
-                <p className="text-text-muted font-mono uppercase text-sm tracking-wider">A vita</p>
+            <Card className="bg-black border-[#27272A] flex flex-col hover:border-gray-600 transition-colors relative">
+              <CardHeader className="p-8 pb-6">
+                <p className="text-sm font-medium text-gray-400 mb-2">Gratuito</p>
+                <div className="text-5xl font-bold mb-2 text-white">€0</div>
+                <p className="text-gray-500 text-sm">Per sempre</p>
               </CardHeader>
-              <CardContent className="p-10 pt-0 space-y-6">
-                {['3 MASTER PLAN MENSILI', 'MOTORE RICERCA AI', 'TESTO GREZZO', 'L&apos;INTERA INFRASTRUTTURA'].map(f => (
-                  <div key={f} className="flex items-center gap-4">
-                    <CheckCircle2 className="w-6 h-6 text-text-muted" />
-                    <span className="text-text-muted font-bold tracking-tight">{f}</span>
+              <CardContent className="flex-1 p-8 pt-0 space-y-4">
+                {['3 business plan completi', 'Ricerca dati AI', 'Export testo', 'Tutte le 10 sezioni'].map((f, i) => (
+                  <div key={f} className="flex items-center gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-gray-400" />
+                    <span className="text-gray-300 text-sm">{f}</span>
                   </div>
                 ))}
               </CardContent>
-              <CardFooter className="p-10 pt-0">
+              <CardFooter className="p-8 pt-0">
                 <Link href="/auth?redirect=/wizard" className="w-full">
-                  <Button variant="secondary" className="w-full h-14 text-sm tracking-widest group">ACCEDI <ChevronRight className="ml-2 w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"/></Button>
+                  <Button variant="outline" className="w-full">Inizia gratis</Button>
                 </Link>
               </CardFooter>
             </Card>
 
             {/* PRO */}
-            <Card className="bg-bg border-accent relative shadow-glow-strong hover:-translate-y-2 transition-transform duration-500 overflow-hidden">
-              <div className="absolute inset-0 bg-accent/5 pointer-events-none"></div>
-              <div className="absolute top-0 right-0 w-32 h-32 bg-accent opacity-20 blur-3xl pointer-events-none"></div>
-              
-              <div className="absolute -top-3 left-1/2 -translate-x-1/2 bg-accent text-black text-[10px] font-extrabold px-4 py-1.5 rounded-full uppercase tracking-widest shadow-glow">
-                L&apos;ELITE
+            <Card className="bg-[#121214] border-gray-500 flex flex-col shadow-[0_0_20px_rgba(255,255,255,0.03)] relative overflow-hidden">
+              <div className="absolute -top-3 right-6 bg-white text-black text-[10px] font-bold px-3 py-1 rounded-sm uppercase tracking-wide">
+                Consigliato
               </div>
-              <CardHeader className="p-10 pb-8 relative z-10">
-                <p className="text-sm font-bold text-accent uppercase tracking-widest mb-4">EXECUTIVE PRO</p>
-                <div className="text-7xl font-extrabold tracking-tighter mb-4 text-white">€19<span className="text-2xl font-light text-text-muted tracking-normal">/mo</span></div>
-                <p className="text-text-muted font-mono uppercase text-sm tracking-wider">Fatturato Ann.</p>
+              <CardHeader className="p-8 pb-6 relative z-10">
+                <p className="text-sm font-medium text-white mb-2">Pro</p>
+                <div className="text-5xl font-bold mb-2 text-white">€19<span className="text-xl font-normal text-gray-500">/mese</span></div>
+                <p className="text-gray-500 text-sm">Fatturazione annuale</p>
               </CardHeader>
-              <CardContent className="p-10 pt-0 space-y-6 relative z-10">
+              <CardContent className="flex-1 p-8 pt-0 space-y-4 relative z-10">
                 {[
-                  'ALL-ACCESS PASS', 'PDF VIP ESPORTAZIONE',
-                  'STILI INCISIVI E REVISIONI', 'BRANDING BIANCO',
-                  'CANALE SUPPORTO DIRETTO', 'DOMINIO ASSOLUTO'
+                  'Piani illimitati', 'Export PDF professionale',
+                  'Versioni multiple e revisioni', 'Personalizzazione brand',
+                  'Supporto prioritario', 'Editor inline'
                 ].map(f => (
-                  <div key={f} className="flex items-center gap-4">
-                    <CheckCircle2 className="w-6 h-6 text-accent" />
-                    <span className="text-white font-bold tracking-tight">{f}</span>
+                  <div key={f} className="flex items-center gap-3">
+                    <CheckCircle2 className="w-4 h-4 text-white" />
+                    <span className="text-gray-200 text-sm font-medium">{f}</span>
                   </div>
                 ))}
               </CardContent>
-              <CardFooter className="p-10 pt-0 relative z-10">
+              <CardFooter className="p-8 pt-0 relative z-10">
                 <a href="/api/checkout" className="w-full">
-                  <Button className="w-full h-14 text-sm tracking-widest group shadow-glow">
-                    AVVIA IL TRIAL <ChevronRight className="ml-2 w-4 h-4 opacity-50 group-hover:opacity-100 group-hover:translate-x-1 transition-all"/>
-                  </Button>
+                  <Button className="w-full">Inizia il periodo di prova</Button>
                 </a>
               </CardFooter>
             </Card>
@@ -185,21 +188,21 @@ export default function Home() {
       </section>
 
       {/* CTA */}
-      <section className="py-32 bg-bg border-t border-border2 text-center relative overflow-hidden">
-        <div className="absolute inset-0 bg-accent/[0.02] pointer-events-none"></div>
+      <section className="py-24 bg-black border-t border-[#27272A] text-center">
         <motion.div 
-          initial={{ opacity: 0, scale: 0.95 }}
+          initial={{ opacity: 0, scale: 0.98 }}
           whileInView={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.6 }}
           viewport={{ once: true }}
-          className="container mx-auto px-6 relative z-10"
+          className="container mx-auto px-6"
         >
-          <h2 className="text-5xl md:text-7xl font-extrabold tracking-tighter mb-8 uppercase text-white">Pronto A Incassare?</h2>
-          <p className="text-text-muted text-xl md:text-2xl mb-12 max-w-3xl mx-auto font-light">
-            In 12 minuti avrai in mano l&apos;arma che sfonderà le porte del successo. Non aspettare.
+          <h2 className="text-3xl md:text-4xl font-semibold mb-6 text-white">Pronto a validare il tuo progetto?</h2>
+          <p className="text-gray-400 text-lg mb-10 max-w-2xl mx-auto">
+            12 minuti di tempo per un business plan professionale, strutturato per banche e investitori.
           </p>
           <Link href="/auth?redirect=/wizard">
-            <Button size="lg" className="h-16 px-10 text-base shadow-glow-strong">
-              ACCENDI LA FORGIA — 100% GRATIS <ChevronRight className="ml-3 w-6 h-6" />
+            <Button size="lg" className="px-8 bg-white text-black hover:bg-gray-200">
+              Inizia ora, è gratis <ChevronRight className="ml-2 w-5 h-5" />
             </Button>
           </Link>
         </motion.div>
