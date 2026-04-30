@@ -8,6 +8,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from '@/components/ui/card';
 import { toast } from 'sonner';
 import { ArrowLeft, Copy, Download, Trash2, Plus, ChevronRight } from 'lucide-react';
+import InteractiveBackground from '@/components/ui/interactive-bg';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);

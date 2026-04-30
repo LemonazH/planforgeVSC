@@ -89,8 +89,8 @@ export default function AuthPage() {
       >
         <div className="flex justify-center mb-10">
           <Link href="/" className="flex items-center gap-3">
-            <span className="text-2xl text-white/80">◈</span>
-            <span className="font-semibold text-xl tracking-tight text-white">PlanForge</span>
+            <span className="text-2xl text-gray-900/80">◈</span>
+            <span className="font-semibold text-xl tracking-tight text-gray-900">PlanForge</span>
           </Link>
         </div>
 
@@ -107,19 +107,19 @@ export default function AuthPage() {
 
             {mode === 'login' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Bentornato</h2>
-                <p className="text-sm text-gray-400 mb-8 text-center">Accedi al tuo account PlanForge</p>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Bentornato</h2>
+                <p className="text-sm text-gray-500 mb-8 text-center">Accedi al tuo account PlanForge</p>
                 <form onSubmit={handleLogin} className="space-y-5">
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
                   </div>
                   <div>
                     <div className="flex justify-between items-center mb-2">
-                      <label className="text-xs font-medium text-gray-400">Password</label>
-                      <button type="button" onClick={() => setMode('forgot')} className="text-xs text-gray-500 hover:text-white transition-colors">Password dimenticata?</button>
+                      <label className="text-xs font-medium text-gray-500">Password</label>
+                      <button type="button" onClick={() => setMode('forgot')} className="text-xs text-gray-500 hover:text-gray-900 transition-colors">Password dimenticata?</button>
                     </div>
-                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
                   </div>
                   <Button type="submit" className="w-full mt-2" disabled={loading}>
                     {loading ? 'Accesso in corso...' : 'Accedi'}
@@ -138,27 +138,27 @@ export default function AuthPage() {
                 
                 <p className="text-center text-sm text-gray-500 mt-8">
                   Non hai un account?{' '}
-                  <button onClick={() => setMode('signup')} className="text-white hover:text-gray-300 font-medium transition-colors">Registrati gratis</button>
+                  <button onClick={() => setMode('signup')} className="text-gray-900 hover:text-gray-300 font-medium transition-colors">Registrati gratis</button>
                 </p>
               </>
             )}
 
             {mode === 'signup' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Inizia ora</h2>
-                <p className="text-sm text-gray-400 mb-8 text-center">Gratis · 3 business plan inclusi</p>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Inizia ora</h2>
+                <p className="text-sm text-gray-500 mb-8 text-center">Gratis · 3 business plan inclusi</p>
                 <form onSubmit={handleSignup} className="space-y-5">
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2">Nome completo</label>
-                    <Input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Mario Rossi" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Nome completo</label>
+                    <Input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Mario Rossi" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2">Password</label>
-                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Minimo 8 caratteri" required minLength={8} className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Password</label>
+                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Minimo 8 caratteri" required minLength={8} className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
                   </div>
                   <Button type="submit" className="w-full mt-2" disabled={loading}>
                     {loading ? 'Creazione in corso...' : 'Crea account gratis'}
@@ -177,26 +177,26 @@ export default function AuthPage() {
                 </p>
                 <p className="text-center text-sm text-gray-500">
                   Hai già un account?{' '}
-                  <button onClick={() => setMode('login')} className="text-white hover:text-gray-300 font-medium transition-colors">Accedi</button>
+                  <button onClick={() => setMode('login')} className="text-gray-900 hover:text-gray-300 font-medium transition-colors">Accedi</button>
                 </p>
               </>
             )}
 
             {mode === 'magic' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Link Magico</h2>
-                <p className="text-sm text-gray-400 mb-8 text-center">Ricevi un link di accesso sicuro senza digitare la password.</p>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Link Magico</h2>
+                <p className="text-sm text-gray-500 mb-8 text-center">Ricevi un link di accesso sicuro senza digitare la password.</p>
                 <form onSubmit={handleMagicLink} className="space-y-5">
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
                   </div>
                   <Button type="submit" className="w-full mt-2" disabled={loading}>
                     {loading ? 'Invio in corso...' : 'Invia link magico'}
                   </Button>
                 </form>
                 <div className="text-center mt-8">
-                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-white transition-colors">
+                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
                     ← Torna al login
                   </button>
                 </div>
@@ -205,19 +205,19 @@ export default function AuthPage() {
 
             {mode === 'forgot' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-white">Reset Password</h2>
-                <p className="text-sm text-gray-400 mb-8 text-center">Un link per reimpostare la tua parola d&apos;ordine.</p>
+                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Reset Password</h2>
+                <p className="text-sm text-gray-500 mb-8 text-center">Un link per reimpostare la tua parola d&apos;ordine.</p>
                 <form onSubmit={handleForgot} className="space-y-5">
                   <div>
-                    <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-white" />
+                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
                   </div>
                   <Button type="submit" className="w-full mt-2" disabled={loading}>
                     {loading ? 'Invio in corso...' : 'Invia link di reset'}
                   </Button>
                 </form>
                 <div className="text-center mt-8">
-                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-white transition-colors">
+                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
                     ← Torna al login
                   </button>
                 </div>
