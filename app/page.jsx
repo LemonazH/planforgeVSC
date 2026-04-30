@@ -20,7 +20,7 @@ export default function Home() {
           </h1>
 
           <p className="text-lg md:text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
-            Rispondi a 10 sezioni strutturate. L'AI analizza dati di mercato reali,
+            Rispondi a 10 sezioni strutturate. L&apos;AI analizza dati di mercato reali,
             benchmark di settore e genera un piano pronto per investitori, banche e partner.
           </p>
 

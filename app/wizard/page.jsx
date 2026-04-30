@@ -293,6 +293,7 @@ export default function WizardPage() {
       toast.error('Errore di connessione. Controlla la rete e riprova.');
       setView('wizard');
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [data]);
 
   const wordCount = (editedOutput || '').split(/\s+/).filter(Boolean).length;
@@ -336,7 +337,7 @@ export default function WizardPage() {
 
           <p className="text-xs text-gray-400 mt-8 flex items-center justify-center gap-2">
             <RefreshCw className="w-3 h-3 animate-spin" />
-            L'AI sta cercando dati reali con Google Search · ~30-60 sec
+            L&apos;AI sta cercando dati reali con Google Search · ~30-60 sec
           </p>
         </div>
       </div>
