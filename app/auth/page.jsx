@@ -206,7 +206,7 @@ export default function AuthPage() {
             {mode === 'forgot' && (
               <>
                 <h2 className="text-2xl font-semibold mb-2 text-center text-white">Reset Password</h2>
-                <p className="text-sm text-gray-400 mb-8 text-center">Un link per reimpostare la tua parola d'ordine.</p>
+                <p className="text-sm text-gray-400 mb-8 text-center">Un link per reimpostare la tua parola d&apos;ordine.</p>
                 <form onSubmit={handleForgot} className="space-y-5">
                   <div>
                     <label className="block text-xs font-medium text-gray-400 mb-2">Email</label>
