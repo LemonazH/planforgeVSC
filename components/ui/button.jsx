@@ -14,11 +14,11 @@ export const Button = React.forwardRef(({
   const base = "relative inline-flex items-center justify-center rounded-lg font-medium text-sm transition-all duration-500 ease-out focus:outline-none focus:ring-2 focus:ring-white/20 focus:ring-offset-2 focus:ring-offset-black disabled:opacity-50 disabled:pointer-events-none active:scale-[0.98]";
   
   const variants = {
-    primary: "bg-white text-black hover:bg-gray-100 shadow-[0_0_15px_rgba(255,255,255,0.1)] hover:shadow-[0_0_25px_rgba(255,255,255,0.2)]",
-    secondary: "bg-[#18181B] text-white border border-[#27272A] hover:bg-[#27272A] hover:border-gray-500",
-    outline: "border border-[#27272A] bg-transparent hover:border-gray-400 hover:text-white text-gray-300",
-    ghost: "bg-transparent hover:bg-[#18181B] text-gray-400 hover:text-white shadow-none",
-    danger: "bg-red-500 text-white hover:bg-red-600 shadow-[0_0_15px_rgba(239,68,68,0.2)]",
+    primary: "bg-gray-900 text-white hover:bg-black shadow-[0_4px_14px_rgba(0,0,0,0.1)] hover:shadow-[0_6px_20px_rgba(0,0,0,0.15)]",
+    secondary: "bg-gray-100 text-gray-900 hover:bg-gray-200 border border-transparent",
+    outline: "border border-gray-200 bg-white hover:border-gray-900 hover:bg-gray-50 text-gray-900",
+    ghost: "bg-transparent hover:bg-gray-100 text-gray-500 hover:text-gray-900 shadow-none",
+    danger: "bg-red-500 text-white hover:bg-red-600 shadow-[0_4px_14px_rgba(239,68,68,0.2)]",
   };
   
   const sizes = {

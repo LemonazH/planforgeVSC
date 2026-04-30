@@ -78,18 +78,17 @@ export default function AuthPage() {
 
   return (
     <div className="min-h-screen flex items-center justify-center p-6 relative overflow-hidden bg-bg">
-      <div className="absolute inset-0 bg-[url('/noise.png')] opacity-[0.02] mix-blend-overlay pointer-events-none"></div>
-      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[800px] h-[800px] bg-white/[0.02] rounded-full blur-[100px] pointer-events-none"></div>
-
+      <div className="absolute inset-0 bg-[#FAFAFA] opacity-50 bg-[url('/noise.png')] mix-blend-overlay pointer-events-none"></div>
+      
       <motion.div 
-        initial={{ opacity: 0, scale: 0.98, y: 10 }}
-        animate={{ opacity: 1, scale: 1, y: 0 }}
-        transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
-        className="w-full max-w-[420px] bg-gradient-to-b from-[#121214] to-[#0A0A0A] border border-[#27272A] rounded-2xl p-8 shadow-glass relative z-10"
+        initial={{ opacity: 0, y: 15 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.7, ease: [0.16, 1, 0.3, 1] }}
+        className="w-full max-w-[420px] bg-white border border-gray-200 rounded-3xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.06)] relative z-10"
       >
         <div className="flex justify-center mb-10">
           <Link href="/" className="flex items-center gap-3">
-            <span className="text-2xl text-gray-900/80">◈</span>
+            <span className="text-2xl text-gray-900">◈</span>
             <span className="font-semibold text-xl tracking-tight text-gray-900">PlanForge</span>
           </Link>
         </div>
@@ -97,106 +96,112 @@ export default function AuthPage() {
         <AnimatePresence mode="wait">
           <motion.div
             key={mode}
-            initial={{ opacity: 0, x: 10 }}
+            initial={{ opacity: 0, x: 5 }}
             animate={{ opacity: 1, x: 0 }}
-            exit={{ opacity: 0, x: -10 }}
-            transition={{ duration: 0.3 }}
+            exit={{ opacity: 0, x: -5 }}
+            transition={{ duration: 0.2 }}
           >
-            {error && <div className="p-3 mb-6 bg-red-500/10 border border-red-500/20 rounded-lg text-red-500 text-sm">{error}</div>}
-            {message && <div className="p-3 mb-6 bg-green-500/10 border border-green-500/20 rounded-lg text-green-500 text-sm">{message}</div>}
+            {error && <div className="p-3 mb-6 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-medium">{error}</div>}
+            {message && <div className="p-3 mb-6 bg-green-50 border border-green-200 rounded-xl text-green-700 text-sm font-medium">{message}</div>}
 
             {mode === 'login' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Bentornato</h2>
-                <p className="text-sm text-gray-500 mb-8 text-center">Accedi al tuo account PlanForge</p>
-                <form onSubmit={handleLogin} className="space-y-5">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-2">Bentornato</h2>
+                  <p className="text-sm text-gray-500">Accedi al tuo account PlanForge</p>
+                </div>
+                <form onSubmit={handleLogin} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-200 text-gray-900 shadow-sm" />
                   </div>
                   <div>
-                    <div className="flex justify-between items-center mb-2">
-                      <label className="text-xs font-medium text-gray-500">Password</label>
-                      <button type="button" onClick={() => setMode('forgot')} className="text-xs text-gray-500 hover:text-gray-900 transition-colors">Password dimenticata?</button>
+                    <div className="flex justify-between items-center mb-1.5">
+                      <label className="text-xs font-semibold uppercase tracking-wider text-gray-500">Password</label>
+                      <button type="button" onClick={() => setMode('forgot')} className="text-xs text-gray-500 hover:text-gray-900 transition-colors font-medium">Password dimenticata?</button>
                     </div>
-                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
+                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="••••••••" required className="bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-200 text-gray-900 shadow-sm" />
                   </div>
-                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                  <Button type="submit" className="w-full mt-4" disabled={loading}>
                     {loading ? 'Accesso in corso...' : 'Accedi'}
                   </Button>
                 </form>
 
-                <div className="relative my-8 text-center">
-                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#27272A]"></div></div>
-                  <span className="relative bg-[#0E0E10] px-3 text-xs text-gray-500 uppercase tracking-wider">oppure</span>
+                <div className="relative my-8 text-center flex items-center justify-center">
+                  <div className="absolute w-full border-t border-gray-200"></div>
+                  <span className="relative bg-white px-4 text-xs font-medium text-gray-400 uppercase tracking-widest">oppure</span>
                 </div>
 
                 <div className="space-y-3">
-                  <Button variant="secondary" className="w-full" onClick={handleGoogle}>Continua con Google</Button>
-                  <Button variant="outline" className="w-full" onClick={() => setMode('magic')}>Accedi senza password</Button>
+                  <Button variant="outline" className="w-full" onClick={handleGoogle}>Continua con Google</Button>
+                  <Button variant="ghost" className="w-full" onClick={() => setMode('magic')}>Accedi senza password</Button>
                 </div>
                 
                 <p className="text-center text-sm text-gray-500 mt-8">
                   Non hai un account?{' '}
-                  <button onClick={() => setMode('signup')} className="text-gray-900 hover:text-gray-300 font-medium transition-colors">Registrati gratis</button>
+                  <button onClick={() => setMode('signup')} className="text-gray-900 hover:underline font-semibold transition-colors">Registrati gratis</button>
                 </p>
               </>
             )}
 
             {mode === 'signup' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Inizia ora</h2>
-                <p className="text-sm text-gray-500 mb-8 text-center">Gratis · 3 business plan inclusi</p>
-                <form onSubmit={handleSignup} className="space-y-5">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-2">Inizia ora</h2>
+                  <p className="text-sm text-gray-500">Gratis · 3 business plan inclusi</p>
+                </div>
+                <form onSubmit={handleSignup} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-2">Nome completo</label>
-                    <Input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Mario Rossi" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Nome completo</label>
+                    <Input type="text" value={name} onChange={e => setName(e.target.value)} placeholder="Mario Rossi" required className="bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-200 text-gray-900 shadow-sm" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-200 text-gray-900 shadow-sm" />
                   </div>
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-2">Password</label>
-                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Minimo 8 caratteri" required minLength={8} className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Password</label>
+                    <Input type="password" value={password} onChange={e => setPassword(e.target.value)} placeholder="Minimo 8 caratteri" required minLength={8} className="bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-200 text-gray-900 shadow-sm" />
                   </div>
-                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                  <Button type="submit" className="w-full mt-4" disabled={loading}>
                     {loading ? 'Creazione in corso...' : 'Crea account gratis'}
                   </Button>
                 </form>
 
-                <div className="relative my-8 text-center">
-                  <div className="absolute inset-0 flex items-center"><div className="w-full border-t border-[#27272A]"></div></div>
-                  <span className="relative bg-[#0E0E10] px-3 text-xs text-gray-500 uppercase tracking-wider">oppure</span>
+                <div className="relative my-8 text-center flex items-center justify-center">
+                  <div className="absolute w-full border-t border-gray-200"></div>
+                  <span className="relative bg-white px-4 text-xs font-medium text-gray-400 uppercase tracking-widest">oppure</span>
                 </div>
 
-                <Button variant="secondary" className="w-full mb-6" onClick={handleGoogle}>Continua con Google</Button>
+                <Button variant="outline" className="w-full mb-6" onClick={handleGoogle}>Continua con Google</Button>
                 
-                <p className="text-center text-xs text-gray-600 mb-4">
+                <p className="text-center text-xs text-gray-400 mb-2">
                   Registrandoti accetti i nostri Termini di servizio.
                 </p>
                 <p className="text-center text-sm text-gray-500">
                   Hai già un account?{' '}
-                  <button onClick={() => setMode('login')} className="text-gray-900 hover:text-gray-300 font-medium transition-colors">Accedi</button>
+                  <button onClick={() => setMode('login')} className="text-gray-900 hover:underline font-semibold transition-colors">Accedi</button>
                 </p>
               </>
             )}
 
             {mode === 'magic' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Link Magico</h2>
-                <p className="text-sm text-gray-500 mb-8 text-center">Ricevi un link di accesso sicuro senza digitare la password.</p>
-                <form onSubmit={handleMagicLink} className="space-y-5">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-2">Link Magico</h2>
+                  <p className="text-sm text-gray-500">Ricevi un link sicuro per accedere senza password.</p>
+                </div>
+                <form onSubmit={handleMagicLink} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-200 text-gray-900 shadow-sm" />
                   </div>
-                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                  <Button type="submit" className="w-full mt-4" disabled={loading}>
                     {loading ? 'Invio in corso...' : 'Invia link magico'}
                   </Button>
                 </form>
                 <div className="text-center mt-8">
-                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                  <button onClick={() => setMode('login')} className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
                     ← Torna al login
                   </button>
                 </div>
@@ -205,19 +210,21 @@ export default function AuthPage() {
 
             {mode === 'forgot' && (
               <>
-                <h2 className="text-2xl font-semibold mb-2 text-center text-gray-900">Reset Password</h2>
-                <p className="text-sm text-gray-500 mb-8 text-center">Un link per reimpostare la tua parola d&apos;ordine.</p>
-                <form onSubmit={handleForgot} className="space-y-5">
+                <div className="text-center mb-8">
+                  <h2 className="text-2xl font-bold tracking-tight text-gray-900 mb-2">Reset Password</h2>
+                  <p className="text-sm text-gray-500">Un link per reimpostare la tua parola d&apos;ordine.</p>
+                </div>
+                <form onSubmit={handleForgot} className="space-y-4">
                   <div>
-                    <label className="block text-xs font-medium text-gray-500 mb-2">Email</label>
-                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-[#050505] border-[#27272A] focus:border-gray-500 text-gray-900" />
+                    <label className="block text-xs font-semibold uppercase tracking-wider text-gray-500 mb-1.5">Email</label>
+                    <Input type="email" value={email} onChange={e => setEmail(e.target.value)} placeholder="tu@email.com" required className="bg-gray-50 border-gray-200 focus:border-gray-400 focus:ring-gray-200 text-gray-900 shadow-sm" />
                   </div>
-                  <Button type="submit" className="w-full mt-2" disabled={loading}>
+                  <Button type="submit" className="w-full mt-4" disabled={loading}>
                     {loading ? 'Invio in corso...' : 'Invia link di reset'}
                   </Button>
                 </form>
                 <div className="text-center mt-8">
-                  <button onClick={() => setMode('login')} className="text-sm text-gray-500 hover:text-gray-900 transition-colors">
+                  <button onClick={() => setMode('login')} className="text-sm font-medium text-gray-500 hover:text-gray-900 transition-colors">
                     ← Torna al login
                   </button>
                 </div>

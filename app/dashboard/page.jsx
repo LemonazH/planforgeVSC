@@ -191,68 +191,68 @@ export default function Dashboard() {
           </CardContent>
         </Card>
 
-        <Link href="/wizard" className="group h-full flex flex-col items-center justify-center p-6 rounded-xl border-2 border-dashed border-green-border bg-green-bg hover:bg-green-50 transition-colors">
-          <div className="w-10 h-10 rounded-full bg-green text-white flex items-center justify-center mb-2 group-hover:scale-105 transition-transform">
-            <Plus className="w-6 h-6" />
+        <Link href="/wizard" className="group h-full flex flex-col items-center justify-center p-6 rounded-xl border-2 border-dashed border-gray-200 bg-white hover:border-gray-500 hover:bg-gray-50 transition-colors">
+          <div className="w-10 h-10 rounded-full bg-gray-900 text-white flex items-center justify-center mb-3 shadow-[0_4px_14px_rgba(0,0,0,0.1)] group-hover:scale-105 transition-transform">
+            <Plus className="w-5 h-5" />
           </div>
-          <p className="font-semibold text-green">Nuovo piano</p>
+          <p className="font-semibold text-gray-900">Nuovo piano</p>
         </Link>
       </div>
 
       {/* Barra limiti free */}
       {!isPro && (
-        <Card className="mb-8 border-border2">
+        <Card className="mb-8 border-gray-200 shadow-sm">
           <CardContent className="p-6">
             <div className="flex justify-between items-end mb-3">
-              <span className="font-semibold">Piano gratuito — utilizzo</span>
-              <span className="text-sm text-gray-500">{usedFree} / {limitFree} piani</span>
+              <span className="font-semibold text-gray-900">Piano gratuito — utilizzo</span>
+              <span className="text-sm font-medium text-gray-500">{usedFree} / {limitFree} piani completati</span>
             </div>
-            <div className="h-2 w-full bg-gray-100 rounded-full overflow-hidden">
+            <div className="h-2.5 w-full bg-gray-100 rounded-full overflow-hidden">
               <div 
-                className={`h-full rounded-full transition-all duration-500 ${usedFree >= limitFree ? 'bg-red' : 'bg-accent'}`} 
+                className={`h-full rounded-full transition-all duration-500 ${usedFree >= limitFree ? 'bg-red-500' : 'bg-gray-900'}`} 
                 style={{ width: `${Math.min((usedFree / limitFree) * 100, 100)}%` }}
               />
             </div>
             {usedFree >= limitFree && (
-              <p className="text-sm text-red mt-3">
-                Limite raggiunto. <a href="/api/checkout" className="font-bold underline">Passa a Pro per continuare →</a>
+              <p className="text-sm font-medium text-red-500 mt-3">
+                Limite raggiunto. <a href="/api/checkout" className="underline hover:text-red-600 transition-colors">Passa a Pro per continuare →</a>
               </p>
             )}
           </CardContent>
         </Card>
       )}
 
-      <h2 className="text-xl font-bold mb-4">I tuoi business plan</h2>
+      <h2 className="text-xl font-bold mb-4 tracking-tight text-gray-900">I tuoi business plan</h2>
 
       {plans.length === 0 ? (
-        <div className="py-20 text-center border-2 border-dashed border-border2 rounded-xl bg-white">
-          <div className="text-5xl text-gray-300 mb-4">◈</div>
-          <h3 className="text-lg font-semibold text-gray-900 mb-2">Nessun business plan ancora</h3>
-          <p className="text-gray-500 mb-6">Crea il tuo primo piano in 12 minuti.</p>
+        <div className="py-20 text-center border-2 border-dashed border-gray-200 rounded-2xl bg-white shadow-sm">
+          <div className="text-5xl text-gray-200 mb-4 inline-block">◈</div>
+          <h3 className="text-lg font-bold tracking-tight text-gray-900 mb-2">Nessun business plan ancora</h3>
+          <p className="text-gray-500 font-medium mb-6">Crea il tuo primo piano dettagliato in 12 minuti.</p>
           <Link href="/wizard">
-            <Button>Crea il primo piano <ChevronRight className="ml-2 w-4 h-4" /></Button>
+            <Button className="px-6 py-5 text-sm uppercase tracking-wide">Crea il primo piano <ChevronRight className="ml-2 w-4 h-4" /></Button>
           </Link>
         </div>
       ) : (
-        <div className="space-y-3">
+        <div className="space-y-4">
           {plans.map(plan => (
-            <Card key={plan.id} className="hover:shadow-md transition-shadow">
-              <div className="p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
+            <Card key={plan.id} className="border-gray-200 shadow-sm hover:shadow-[0_8px_30px_rgba(0,0,0,0.06)] hover:border-gray-300 transition-all duration-300">
+              <div className="p-6 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4">
                 <div className="flex-1">
-                  <h3 className="font-bold text-gray-900 mb-1">{plan.company_name}</h3>
-                  <p className="text-sm text-gray-500">
+                  <h3 className="font-bold text-lg tracking-tight text-gray-900 mb-1">{plan.company_name}</h3>
+                  <p className="text-sm font-medium text-gray-500">
                     {plan.sector} · {plan.country} · {plan.word_count?.toLocaleString()} parole
                   </p>
                 </div>
-                <div className="flex items-center gap-4 w-full sm:w-auto">
-                  <p className="text-sm text-gray-400 hidden sm:block">
+                <div className="flex items-center gap-6 w-full sm:w-auto">
+                  <p className="text-sm font-medium text-gray-400 hidden sm:block uppercase tracking-wider">
                     {new Date(plan.created_at).toLocaleDateString('it-IT')}
                   </p>
                   <div className="flex gap-2 flex-1 sm:flex-initial">
-                    <Button variant="outline" size="sm" className="w-full sm:w-auto" onClick={() => loadPlanFull(plan.id)}>
+                    <Button variant="outline" size="sm" className="w-full sm:w-auto font-semibold px-4" onClick={() => loadPlanFull(plan.id)}>
                       Apri
                     </Button>
-                    <Button variant="danger" size="icon" className="shrink-0" onClick={() => deletePlan(plan.id)}>
+                    <Button variant="danger" size="icon" className="shrink-0 rounded-lg hover:bg-red-500" onClick={() => deletePlan(plan.id)}>
                       <Trash2 className="w-4 h-4" />
                     </Button>
                   </div>
