@@ -3,13 +3,15 @@ import { useState, useEffect } from 'react';
 import { getSupabaseBrowser } from '@/lib/supabase';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
+import { exportToPdf } from '@/lib/pdf-export';
 
 export default function Dashboard() {
   const [user, setUser] = useState(null);
   const [profile, setProfile] = useState(null);
   const [plans, setPlans] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [activePlan, setActivePlan] = useState(null); // piano aperto
+  const [activePlan, setActivePlan] = useState(null);
+  const [exportingPdf, setExportingPdf] = useState(false);
   const router = useRouter();
 
   useEffect(() => {
@@ -77,22 +79,32 @@ export default function Dashboard() {
         <div style={{ background: '#fff', borderBottom: '1px solid #e2e2de', position: 'sticky', top: 0, zIndex: 10 }}>
           <div style={{ maxWidth: 760, margin: '0 auto', padding: '0 20px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', height: 52 }}>
             <button onClick={() => setActivePlan(null)} style={{ fontSize: 13, color: '#555', cursor: 'pointer', border: 'none', background: 'none' }}>← Torna alla Dashboard</button>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button
-                onClick={() => { navigator.clipboard.writeText(activePlan.output_text); alert('Copiato!'); }}
-                style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #ddd', borderRadius: 7, background: '#fff', cursor: 'pointer' }}>
-                Copia testo
-              </button>
-              <button
-                onClick={() => deletePlan(activePlan.id)}
-                style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #fecaca', borderRadius: 7, background: '#fef2f2', color: '#dc2626', cursor: 'pointer' }}>
-                Elimina
-              </button>
-            </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button
+            onClick={async () => {
+              setExportingPdf(true);
+              try { await exportToPdf('plan-document', `business-plan-${(activePlan.company_name || 'plan').replace(/\s+/g, '-').toLowerCase()}.pdf`); } catch (e) { console.error(e); }
+              setExportingPdf(false);
+            }}
+            disabled={exportingPdf}
+            style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #ddd', borderRadius: 7, background: exportingPdf ? '#f0fdf4' : '#fff', cursor: 'pointer', color: exportingPdf ? '#16a34a' : '#333' }}>
+            {exportingPdf ? 'Generazione...' : 'Export PDF'}
+          </button>
+          <button
+            onClick={() => { navigator.clipboard.writeText(activePlan.output_text); alert('Copiato!'); }}
+            style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #ddd', borderRadius: 7, background: '#fff', cursor: 'pointer' }}>
+            Copia testo
+          </button>
+          <button
+            onClick={() => deletePlan(activePlan.id)}
+            style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #fecaca', borderRadius: 7, background: '#fef2f2', color: '#dc2626', cursor: 'pointer' }}>
+            Elimina
+          </button>
+        </div>
           </div>
         </div>
         <div style={{ maxWidth: 760, margin: '0 auto', padding: '28px 20px' }}>
-          <div style={{ background: '#fff', border: '1px solid #e2e2de', borderRadius: 12, padding: '28px 32px' }}>
+          <div id="plan-document" style={{ background: '#fff', border: '1px solid #e2e2de', borderRadius: 12, padding: '28px 32px' }}>
             <h1 style={{ fontSize: 22, fontWeight: 800, marginBottom: 4 }}>{activePlan.title}</h1>
             <p style={{ fontSize: 12, color: '#aaa', marginBottom: 28, paddingBottom: 20, borderBottom: '1px solid #f0f0ec' }}>
               {activePlan.sector} · {activePlan.country} · {new Date(activePlan.created_at).toLocaleDateString('it-IT')} · {activePlan.word_count?.toLocaleString()} parole

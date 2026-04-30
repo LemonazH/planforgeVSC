@@ -74,7 +74,7 @@ export default function Home() {
               Come funziona
             </a>
           </div>
-          <p style={{ fontSize: 12, color: '#aaa' }}>Piano gratuito include 1 business plan completo</p>
+          <p style={{ fontSize: 12, color: '#aaa' }}>Piano gratuito include 3 business plan completi</p>
         </div>
       </section>
 
@@ -170,7 +170,7 @@ export default function Home() {
               <div style={{ fontSize: 36, fontWeight: 800, marginBottom: 4 }}>€0</div>
               <p style={{ fontSize: 13, color: '#888', marginBottom: 20 }}>Per sempre</p>
               <ul style={{ listStyle: 'none', marginBottom: 28 }}>
-                {['1 business plan completo', 'Ricerca AI dati di mercato', 'Export copia testo', 'Tutte le 10 sezioni'].map(f => (
+                {['3 business plan completi', 'Ricerca AI dati di mercato', 'Export copia testo', 'Tutte le 10 sezioni'].map(f => (
                   <li key={f} style={{ fontSize: 13, color: '#555', padding: '5px 0', display: 'flex', gap: 8 }}>
                     <span style={{ color: '#16a34a' }}>✓</span>{f}
                   </li>

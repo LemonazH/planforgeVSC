@@ -107,6 +107,26 @@ CREATE INDEX idx_business_plans_user_id ON public.business_plans(user_id);
 CREATE INDEX idx_business_plans_created_at ON public.business_plans(created_at DESC);
 CREATE INDEX idx_profiles_stripe_customer ON public.profiles(stripe_customer_id);
 
+-- ─── TABELLA RATE LIMITING ──────────────────────────────────────
+-- Sostituisce il rate limiting in-memory (perso ad ogni redeploy Vercel)
+CREATE TABLE public.rate_limits (
+  user_id UUID PRIMARY KEY REFERENCES public.profiles(id) ON DELETE CASCADE,
+  request_count INTEGER NOT NULL DEFAULT 1,
+  window_start TIMESTAMPTZ NOT NULL DEFAULT NOW(),
+  created_at TIMESTAMPTZ DEFAULT NOW()
+);
+
+-- RLS: solo il service_role accede (server-side only)
+ALTER TABLE public.rate_limits ENABLE ROW LEVEL SECURITY;
+
+CREATE POLICY "Service role full access on rate_limits"
+ON public.rate_limits FOR ALL
+USING (true)
+WITH CHECK (true);
+
+-- Indice per cleanup rapido
+CREATE INDEX idx_rate_limits_window_start ON public.rate_limits(window_start);
+
 -- ─── VISTA: statistiche utente (comoda per la dashboard) ─────
 CREATE VIEW public.user_stats AS
 SELECT

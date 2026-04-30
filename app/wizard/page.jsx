@@ -1,6 +1,7 @@
 'use client';
 import { useState, useEffect, useCallback } from 'react';
 import Link from 'next/link';
+import { exportToPdf } from '@/lib/pdf-export';
 
 // ─── STEPS DATA ──────────────────────────────────────────────────────────────
 const STEPS = [
@@ -197,6 +198,7 @@ export default function WizardPage() {
   const [copied, setCopied] = useState(false);
   const [showUpgrade, setShowUpgrade] = useState(false);
   const [searchQueries, setSearchQueries] = useState([]);
+  const [exportingPdf, setExportingPdf] = useState(false);
 
   // Genera UUID utente e imposta cookie al mount
   useEffect(() => {
@@ -345,16 +347,30 @@ export default function WizardPage() {
               <span style={{ fontSize: 14, fontWeight: 700 }}>Business Plan — {data.companyName}</span>
               <span style={{ fontSize: 12, color: '#aaa', marginLeft: 10 }}>{wordCount.toLocaleString()} parole</span>
             </div>
-            <div style={{ display: 'flex', gap: 8 }}>
-              <button
-                onClick={() => { navigator.clipboard.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
-                style={{
-                  padding: '6px 14px', fontSize: 12, fontWeight: 600,
-                  border: '1px solid #ddd', borderRadius: 7,
-                  background: copied ? '#f0fdf4' : '#fff', color: copied ? '#16a34a' : '#333',
-                }}>
-                {copied ? '✓ Copiato!' : 'Copia testo'}
-              </button>
+      <div style={{ display: 'flex', gap: 8 }}>
+        <button
+          onClick={async () => {
+            setExportingPdf(true);
+            try { await exportToPdf('plan-document', `business-plan-${(data.companyName || 'plan').replace(/\s+/g, '-').toLowerCase()}.pdf`); } catch (e) { console.error(e); }
+            setExportingPdf(false);
+          }}
+          disabled={exportingPdf}
+          style={{
+            padding: '6px 14px', fontSize: 12, fontWeight: 600,
+            border: '1px solid #ddd', borderRadius: 7,
+            background: exportingPdf ? '#f0fdf4' : '#fff', color: exportingPdf ? '#16a34a' : '#333',
+          }}>
+          {exportingPdf ? 'Generazione...' : 'Export PDF'}
+        </button>
+        <button
+          onClick={() => { navigator.clipboard.writeText(output); setCopied(true); setTimeout(() => setCopied(false), 2000); }}
+          style={{
+            padding: '6px 14px', fontSize: 12, fontWeight: 600,
+            border: '1px solid #ddd', borderRadius: 7,
+            background: copied ? '#f0fdf4' : '#fff', color: copied ? '#16a34a' : '#333',
+          }}>
+          {copied ? '✓ Copiato!' : 'Copia testo'}
+        </button>
               <button
                 onClick={() => { setView('wizard'); setStep(0); setOutput(''); }}
                 style={{ padding: '6px 14px', fontSize: 12, border: '1px solid #ddd', borderRadius: 7, background: '#fff', color: '#555' }}>
@@ -390,11 +406,11 @@ export default function WizardPage() {
             </div>
           )}
 
-          {/* Document */}
-          <div style={{
-            background: '#fff', border: '1px solid #e2e2de', borderRadius: 12,
-            padding: '28px 32px', marginBottom: 20,
-          }}>
+      {/* Document */}
+      <div id="plan-document" style={{
+        background: '#fff', border: '1px solid #e2e2de', borderRadius: 12,
+        padding: '28px 32px', marginBottom: 20,
+      }}>
             <h1 style={{ fontSize: 22, fontWeight: 800, marginBottom: 4 }}>
               Business Plan — {data.companyName}
             </h1>

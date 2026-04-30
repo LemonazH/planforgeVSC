@@ -12,7 +12,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request) {
   try {
-    const sb = getSupabaseServer();
+    const sb = await getSupabaseServer();
     const { data: { user }, error: authError } = await sb.auth.getUser();
 
     if (authError || !user) {
@@ -36,7 +36,7 @@ export async function POST(request) {
     }
 
     // Rate limiting check
-    const rateLimit = checkRateLimit(user.id, access.isPro);
+    const rateLimit = await checkRateLimit(user.id, access.isPro);
     if (!rateLimit.allowed) {
       return NextResponse.json(
         {

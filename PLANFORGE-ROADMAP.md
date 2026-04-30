@@ -11,11 +11,11 @@
 
 ## PRIORITÀ 1 — Fix bug e inconsistenze
 
-- [ ] **Landing page dice "1 business plan"** ma il DB ha `plans_limit = 3` — allineare
-- [ ] **PDF Export promesso nella landing Pro** ma non implementato — feature broken
-- [ ] **Rate limiting in-memory** si resetta ad ogni redeploy Vercel — bypassabile. Soluzione: tabella Supabase o Upstash Redis
-- [ ] **`cookies()` in `supabase-server.js`** va wrappato in `await cookies()` per Next.js 14+ — può dare errori
-- [ ] **`.env.example` contiene API key reali** (Gemini, Stripe) — va ripulito
+- [x] **Landing page dice "1 business plan"** ma il DB ha `plans_limit = 3` — allineato a "3 business plan"
+- [x] **PDF Export promesso nella landing Pro** ma non implementato — aggiunto html2pdf.js + pulsante Export PDF in wizard output e dashboard
+- [x] **Rate limiting in-memory** si resetta ad ogni redeploy Vercel — migrato a tabella Supabase `rate_limits`
+- [x] **`cookies()` in `supabase-server.js`** va wrappato in `await cookies()` per Next.js 14+ — corretto, `getSupabaseServer()` ora è async
+- [x] **`.env.example` contiene API key reali** (Gemini, Stripe) — ripulito con placeholder
 
 ## PRIORITÀ 2 — Refactoring architetturale
 
